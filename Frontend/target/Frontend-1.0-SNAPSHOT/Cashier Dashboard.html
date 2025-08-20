@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier Dashboard - Pahana Edu Billing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --dark-bg: #1a1d29;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --shadow-light: 0 10px 40px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Animated background elements */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape-1 {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape-2 {
+            width: 60px;
+            height: 60px;
+            top: 60%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .shape-3 {
+            width: 80px;
+            height: 80px;
+            bottom: 20%;
+            left: 60%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: var(--shadow-light);
+            position: relative;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid rgba(103, 126, 234, 0.1);
+        }
+
+        .dashboard-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: var(--text-primary);
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .dashboard-title i {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .user-details h6 {
+            margin: 0;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .user-details small {
+            color: var(--text-secondary);
+        }
+
+        .logout-btn {
+            background: var(--secondary-gradient);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.3);
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .stat-card:nth-child(1) .stat-icon { background: var(--primary-gradient); }
+        .stat-card:nth-child(2) .stat-icon { background: var(--success-gradient); }
+        .stat-card:nth-child(3) .stat-icon { background: var(--warning-gradient); }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .action-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-primary);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+            animation: slideInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .action-card:nth-child(1) { animation-delay: 0.2s; }
+        .action-card:nth-child(2) { animation-delay: 0.4s; }
+        .action-card:nth-child(3) { animation-delay: 0.6s; }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .action-card:hover::before {
+            left: 100%;
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--shadow-hover);
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .action-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .customers-card .action-icon {
+            background: var(--primary-gradient);
+        }
+
+        .items-card .action-icon {
+            background: var(--success-gradient);
+        }
+
+        .billing-card .action-icon {
+            background: var(--warning-gradient);
+        }
+
+        .action-card:hover .action-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .action-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .action-desc {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .action-features {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .feature-badge {
+            background: rgba(103, 126, 234, 0.1);
+            color: #667eea;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .welcome-banner {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .quick-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
+            
+            .dashboard-title {
+                font-size: 1.8rem;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .action-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        /* Loading animation for page */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: fadeOut 0.5s ease-out 1.5s forwards;
+        }
+
+        .loader-icon {
+            color: white;
+            font-size: 3rem;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        /* Enhanced hover effects */
+        .action-card:hover .action-title {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Notification badge */
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* Loading state for stats */
+        .stat-loading {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            display: none;
+        }
+
+        .stat-number.loading {
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page Loader -->
+    <div class="page-loader">
+        <i class="fas fa-cog loader-icon"></i>
+    </div>
+
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <div class="container">
+        <div class="main-container">
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <div class="welcome-content">
+                    <h3><i class="fas fa-star"></i> Welcome to Pahana Edu Billing</h3>
+                    <p class="mb-0">Manage your cashier tasks with ease and efficiency</p>
+                    <div class="quick-actions">
+                        <a href="#" class="quick-btn"><i class="fas fa-chart-line"></i> Analytics</a>
+                        <a href="#" class="quick-btn"><i class="fas fa-cog"></i> Settings</a>
+                        <a href="#" class="quick-btn"><i class="fas fa-bell"></i> Notifications</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h1 class="dashboard-title">
+                    <i class="fas fa-user-tie"></i>
+                    Cashier Dashboard
+                </h1>
+                <div class="user-info">
+                    <div class="user-details text-end">
+                        <h6>Cashier User</h6>
+                        <small>Cashier</small>
+                    </div>
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <button class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Overview -->
+            <div class="stats-overview">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" id="totalCustomersHandled">0</div>
+                    <div class="stat-label">Customers Handled</div>
+                    <div class="stat-loading">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div class="stat-number" id="totalTransactions">0</div>
+                    <div class="stat-label">Total Transactions</div>
+                    <div class="stat-loading">Loading...</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                    <div class="stat-number" id="dailyRevenue">Rs 0</div>
+                    <div class="stat-label">Daily Revenue</div>
+                    <div class="stat-loading">Loading...</div>
+                </div>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Manage Customers -->
+                <a href="manage-customers.html" class="action-card customers-card">
+                    <div class="action-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="action-title">Manage Customers</div>
+                    <div class="action-desc">
+                        Add, view, edit, and organize your customer database with advanced search and filtering options
+                    </div>
+                    <div class="action-features">
+                        <span class="feature-badge">Add</span>
+                        <span class="feature-badge">Edit</span>
+                        <span class="feature-badge">Search</span>
+                    </div>
+                    <div class="notification-badge">3</div>
+                </a>
+
+                <!-- Manage Items -->
+                <a href="manage-items.html" class="action-card items-card">
+                    <div class="action-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <div class="action-title">Manage Items</div>
+                    <div class="action-desc">
+                        Control your inventory with smart categorization, pricing management, and stock tracking
+                    </div>
+                    <div class="action-features">
+                        <span class="feature-badge">Inventory</span>
+                        <span class="feature-badge">Pricing</span>
+                        <span class="feature-badge">Categories</span>
+                    </div>
+                    <div class="notification-badge">2</div>
+                </a>
+
+                <!-- Smart Billing -->
+                <a href="billing.html" class="action-card billing-card">
+                    <div class="action-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="action-title">Smart Billing</div>
+                    <div class="action-desc">
+                        Create professional invoices, track payments, and generate comprehensive financial reports
+                    </div>
+                    <div class="action-features">
+                        <span class="feature-badge">Invoices</span>
+                        <span class="feature-badge">Reports</span>
+                        <span class="feature-badge">Payments</span>
+                    </div>
+                    <div class="notification-badge">2</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remove page loader
+            setTimeout(() => {
+                const loader = document.querySelector('.page-loader');
+                if (loader) {
+                    loader.style.display = 'none';
+                }
+            }, 1500);
+
+            // Initialize stats loading state
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach(card => {
+                const statNumber = card.querySelector('.stat-number');
+                const statLoading = card.querySelector('.stat-loading');
+                statNumber.classList.add('loading');
+                statLoading.style.display = 'block';
+            });
+
+            // Fetch stats from backend (adjusted for cashier context)
+            fetchStats();
+
+            async function fetchStats() {
+                try {
+                    const response = await fetch('http://localhost:8080/Backend/resources/cashier-stats', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const stats = await response.json();
+                        // Sanitize and validate data
+                        const totalCustomersHandled = Number.isFinite(parseInt(stats.totalCustomersHandled)) ? parseInt(stats.totalCustomersHandled) : 0;
+                        const totalTransactions = Number.isFinite(parseInt(stats.totalTransactions)) ? parseInt(stats.totalTransactions) : 0;
+                        const dailyRevenue = Number.isFinite(parseFloat(stats.dailyRevenue)) ? parseFloat(stats.dailyRevenue) : 0;
+
+                        // Update DOM with sanitized values
+                        document.getElementById('totalCustomersHandled').textContent = totalCustomersHandled.toLocaleString();
+                        document.getElementById('totalTransactions').textContent = totalTransactions.toLocaleString();
+                        document.getElementById('dailyRevenue').textContent = 'Rs ' + dailyRevenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+                        // Remove loading state
+                        statCards.forEach(card => {
+                            const statNumber = card.querySelector('.stat-number');
+                            const statLoading = card.querySelector('.stat-loading');
+                            statNumber.classList.remove('loading');
+                            statLoading.style.display = 'none';
+                        });
+
+                        // Animate numbers
+                        statCards.forEach(card => {
+                            const statNumber = card.querySelector('.stat-number');
+                            if (!statNumber.dataset.animated) {
+                                animateNumber(statNumber);
+                                statNumber.dataset.animated = 'true';
+                            }
+                        });
+                    } else {
+                        let errorMessage = response.statusText;
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const errorData = await response.json();
+                            errorMessage = errorData.message || errorMessage;
+                        } else {
+                            errorMessage = await response.text() || errorMessage;
+                        }
+                        console.error('Failed to fetch stats:', response.status, errorMessage);
+                        showError(`Failed to load stats: ${errorMessage}`);
+                    }
+                } catch (error) {
+                    console.error('Error fetching stats:', error);
+                    showError(`Network error: ${error.message}`);
+                }
+            }
+
+            // Show error message (using Bootstrap toast)
+            function showError(message) {
+                const toast = document.createElement('div');
+                toast.className = 'toast align-items-center text-white bg-danger border-0';
+                toast.setAttribute('role', 'alert');
+                toast.setAttribute('aria-live', 'assertive');
+                toast.setAttribute('aria-atomic', 'true');
+                toast.style.position = 'fixed';
+                toast.style.top = '20px';
+                toast.style.right = '20px';
+                toast.style.zIndex = '9999';
+                toast.innerHTML = `
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            ${sanitizeHTML(message)}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+                const bsToast = new bootstrap.Toast(toast);
+                bsToast.show();
+                setTimeout(() => {
+                    bsToast.hide();
+                    toast.remove();
+                }, 5000);
+            }
+
+            // Sanitize HTML to prevent XSS
+            function sanitizeHTML(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            // Add click effects
+            const actionCards = document.querySelectorAll('.action-card');
+            actionCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Create ripple effect
+                    const ripple = document.createElement('div');
+                    const rect = card.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: radial-gradient(circle, rgba(103, 126, 234, 0.3) 0%, transparent 70%);
+                        border-radius: 50%;
+                        transform: scale(0);
+                        animation: ripple 0.6s ease-out;
+                        pointer-events: none;
+                        z-index: 1;
+                    `;
+                    
+                    card.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+
+            // Logout button functionality
+            document.querySelector('.logout-btn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to logout?')) {
+                    // Add logout animation
+                    document.body.style.animation = 'fadeOut 0.5s ease-out forwards';
+                    setTimeout(() => {
+                        // Redirect to login page
+                        window.location.href = 'login.html';
+                    }, 500);
+                }
+            });
+
+            // Add dynamic time greeting
+            const now = new Date();
+            const hour = now.getHours();
+            let greeting = 'Good Morning';
+            if (hour >= 12 && hour < 17) greeting = 'Good Afternoon';
+            else if (hour >= 17) greeting = 'Good Evening';
+            
+            const welcomeText = document.querySelector('.welcome-banner h3');
+            if (welcomeText) {
+                welcomeText.innerHTML = `<i class="fas fa-star"></i> ${greeting}! Welcome to Pahana Edu Billing`;
+            }
+
+            // Add subtle animations to stats
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const statNumber = entry.target.querySelector('.stat-number');
+                        if (statNumber && !statNumber.dataset.animated) {
+                            animateNumber(statNumber);
+                            statNumber.dataset.animated = 'true';
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.stat-card').forEach(card => {
+                observer.observe(card);
+            });
+
+            function animateNumber(element) {
+                const target = parseInt(element.textContent.replace(/[Rs ,]/g, '')) || 0;
+                const duration = 1500;
+                const start = performance.now();
+                const prefix = element.textContent.includes('Rs') ? 'Rs ' : '';
+                
+                function updateNumber(currentTime) {
+                    const elapsed = currentTime - start;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const current = Math.floor(target * easeOutCubic(progress));
+                    
+                    element.textContent = prefix + current.toLocaleString(
+                        element.id === 'dailyRevenue' ? 'en-US' : undefined,
+                        element.id === 'dailyRevenue' ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : undefined
+                    );
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(updateNumber);
+                    }
+                }
+                
+                requestAnimationFrame(updateNumber);
+            }
+
+            function easeOutCubic(t) {
+                return 1 - Math.pow(1 - t, 3);
+            }
+
+            // Add CSS animation keyframes
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes ripple {
+                    to {
+                        transform: scale(2);
+                        opacity: 0;
+                    }
+                }
+                
+                @keyframes fadeOut {
+                    to {
+                        opacity: 0;
+                        transform: scale(0.95);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>

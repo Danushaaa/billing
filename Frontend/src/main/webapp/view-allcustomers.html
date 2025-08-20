@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pahana Edu - View All Customers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #f8fafc;
+            --accent-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --text-dark: #1e293b;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: none;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient);
+        }
+
+        .card-header {
+            background: white;
+            border: none;
+            padding: 2.5rem 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .card-title {
+            color: var(--text-dark);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .card-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .card-body {
+            padding: 0 2rem 2.5rem;
+        }
+
+        .search-section {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.875rem 1rem 0.875rem 3rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            width: 100%;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            outline: none;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            z-index: 5;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 100px;
+            height: 100px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+        }
+
+        .table {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        .table thead {
+            background: #f8fafc;
+        }
+
+        .table thead th {
+            border: none;
+            padding: 1.25rem 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .table tbody td {
+            padding: 1rem;
+            border-color: #f1f5f9;
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+            transition: background-color 0.2s ease;
+        }
+
+        .btn {
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-warning {
+            background: var(--warning-color);
+            border-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-warning:hover {
+            background: #d97706;
+            border-color: #d97706;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            border-color: var(--danger-color);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #64748b;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #64748b;
+            display: none;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .no-results {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+        }
+
+        .loading-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #64748b;
+        }
+
+        .loading-spinner {
+            width: 3rem;
+            height: 3rem;
+            border: 3px solid #f3f4f6;
+            border-top: 3px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(90deg); }
+            50% { transform: translateY(-40px) rotate(180deg); }
+            75% { transform: translateY(-20px) rotate(270deg); }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 1rem auto;
+                padding: 1.5rem;
+            }
+            
+            .card-title {
+                font-size: 1.5rem;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .table {
+                font-size: 0.85rem;
+            }
+            
+            .btn {
+                font-size: 0.8rem;
+                padding: 0.4rem 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape">
+            <i class="fas fa-users fa-3x"></i>
+        </div>
+        <div class="shape">
+            <i class="fas fa-address-card fa-2x"></i>
+        </div>
+        <div class="shape">
+            <i class="fas fa-user-check fa-4x"></i>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">
+                    <i class="fas fa-users text-primary"></i>
+                    Customers Overview
+                </h1>
+                <p class="card-subtitle">Manage and view all customers in your system</p>
+            </div>
+            
+            <div class="card-body">
+                <div class="alert alert-danger" id="errorAlert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span id="errorMessage"></span>
+                </div>
+
+                <div class="stats-container" id="statsContainer">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalCustomers">-</div>
+                        <div class="stat-label">
+                            <i class="fas fa-users me-1"></i>
+                            Total Customers
+                        </div>
+                    </div>
+                </div>
+
+                <div class="search-section">
+                    <div class="search-container">
+                        <div class="position-relative">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="search-input" id="searchInput" 
+                                   placeholder="Search by Account Number or Name..." 
+                                   aria-label="Search customers">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loading-state" id="loadingState">
+                    <div class="loading-spinner"></div>
+                    <p>Loading customer data...</p>
+                </div>
+
+                <div class="table-container" id="tableContainer" style="display: none;">
+                    <table class="table" id="customersTable">
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-id-badge me-2"></i>Account Number</th>
+                                <th><i class="fas fa-user me-2"></i>Customer Name</th>
+                                <th><i class="fas fa-map-marker-alt me-2"></i>Address</th>
+                                <th><i class="fas fa-phone me-2"></i>Contact Number</th>
+                                <th><i class="fas fa-cogs me-2"></i>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+
+                <div class="empty-state" id="emptyState">
+                    <i class="fas fa-users-slash"></i>
+                    <h4>No Customers Found</h4>
+                    <p>Your customer list is empty. Start by adding some customers.</p>
+                    <a href="add-customer.html" class="btn btn-primary mt-3">
+                        <i class="fas fa-plus me-2"></i>Add First Customer
+                    </a>
+                </div>
+
+                <div class="no-results" id="noResults">
+                    <i class="fas fa-search fa-3x mb-3 opacity-50"></i>
+                    <h5>No customers match your search</h5>
+                    <p class="text-muted">Try adjusting your search terms or browse all customers</p>
+                </div>
+
+                <div class="navigation-section">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+                        <a href="manage-customers.html" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Back to Manage Customers
+                        </a>
+                        <a href="add-customer.html" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>
+                            Add New Customer
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 15px; border: none;">
+                <div class="modal-header" style="border: none; padding-bottom: 0;">
+                    <h5 class="modal-title">
+                        <i class="fas fa-trash-alt text-danger me-2"></i>
+                        Confirm Deletion
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding-top: 1rem;">
+                    <div class="text-center">
+                        <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+                        <p>Are you sure you want to delete this customer?</p>
+                        <div class="bg-light p-3 rounded-3 mb-3">
+                            <strong id="deleteCustomerName">Customer Name</strong><br>
+                            <small class="text-muted">Account: <span id="deleteCustomerAccount">Account Number</span></small>
+                        </div>
+                        <p class="text-danger small">This action cannot be undone.</p>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border: none;">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmDelete">
+                        <i class="fas fa-trash-alt me-2"></i>Delete Customer
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let allCustomers = [];
+            let customerToDelete = null;
+            const deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+
+            // DOM elements
+            const loadingState = document.getElementById('loadingState');
+            const tableContainer = document.getElementById('tableContainer');
+            const emptyState = document.getElementById('emptyState');
+            const noResults = document.getElementById('noResults');
+            const errorAlert = document.getElementById('errorAlert');
+            const searchInput = document.getElementById('searchInput');
+            const totalCustomersEl = document.getElementById('totalCustomers');
+
+            // Sanitize HTML to prevent XSS
+            function sanitizeHTML(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            async function loadCustomers() {
+                try {
+                    showLoading();
+                    const response = await fetch('http://localhost:8080/Backend/resources/customers');
+                    
+                    if (response.ok) {
+                        allCustomers = await response.json();
+                        hideLoading();
+                        updateStatistics();
+                        renderCustomers(allCustomers);
+                    } else {
+                        let errorMessage = response.statusText;
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const errorData = await response.json();
+                            errorMessage = errorData.message || errorMessage;
+                        } else {
+                            errorMessage = await response.text() || errorMessage;
+                        }
+                        showError(`Error loading customers: ${errorMessage}`);
+                        console.error('Response Status:', response.status, 'Message:', errorMessage);
+                    }
+                } catch (error) {
+                    showError(`Network error: ${error.message}`);
+                    console.error('Fetch Error:', error);
+                }
+            }
+
+            function showLoading() {
+                loadingState.style.display = 'block';
+                tableContainer.style.display = 'none';
+                emptyState.style.display = 'none';
+                noResults.style.display = 'none';
+                errorAlert.style.display = 'none';
+            }
+
+            function hideLoading() {
+                loadingState.style.display = 'none';
+            }
+
+            function showError(message) {
+                hideLoading();
+                document.getElementById('errorMessage').textContent = message;
+                errorAlert.style.display = 'block';
+                tableContainer.style.display = 'none';
+                emptyState.style.display = 'none';
+            }
+
+            function showSuccessMessage(message) {
+                const successAlert = document.createElement('div');
+                successAlert.className = 'alert alert-success';
+                successAlert.innerHTML = `<i class="fas fa-check-circle me-2"></i>${message}`;
+                errorAlert.parentNode.insertBefore(successAlert, errorAlert);
+                setTimeout(() => {
+                    successAlert.remove();
+                }, 3000);
+            }
+
+            function updateStatistics() {
+                const totalCustomers = allCustomers.length;
+                totalCustomersEl.textContent = totalCustomers;
+            }
+
+            function renderCustomers(customers) {
+                const tbody = document.querySelector('#customersTable tbody');
+                if (!tbody) {
+                    showError('Table body not found. Please check the HTML structure.');
+                    return;
+                }
+
+                tbody.innerHTML = '';
+                if (customers.length === 0) {
+                    if (allCustomers.length === 0) {
+                        emptyState.style.display = 'block';
+                        tableContainer.style.display = 'none';
+                        noResults.style.display = 'none';
+                    } else {
+                        noResults.style.display = 'block';
+                        tableContainer.style.display = 'none';
+                        emptyState.style.display = 'none';
+                    }
+                    return;
+                }
+
+                tableContainer.style.display = 'block';
+                emptyState.style.display = 'none';
+                noResults.style.display = 'none';
+
+                customers.forEach(customer => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <span class="fw-bold">${sanitizeHTML(customer.accountNumber)}</span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user text-primary me-2"></i>
+                                ${sanitizeHTML(customer.name)}
+                            </div>
+                        </td>
+                        <td>${sanitizeHTML(customer.address)}</td>
+                        <td>${sanitizeHTML(customer.contact)}</td>
+                        <td>
+                            <div class="d-flex gap-2">
+                                <a href="edit-customer.html?accountNumber=${encodeURIComponent(customer.accountNumber)}" 
+                                   class="btn btn-warning btn-sm" 
+                                   title="Edit Customer" 
+                                   aria-label="Edit customer ${sanitizeHTML(customer.name)}">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn btn-danger btn-sm" 
+                                        onclick="confirmDelete('${sanitizeHTML(customer.accountNumber)}', '${sanitizeHTML(customer.name)}')"
+                                        title="Delete Customer"
+                                        aria-label="Delete customer ${sanitizeHTML(customer.name)}">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            // Debounced search
+            let debounceTimeout;
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(debounceTimeout);
+                debounceTimeout = setTimeout(() => {
+                    const searchTerm = e.target.value.toLowerCase().trim();
+                    if (searchTerm === '') {
+                        renderCustomers(allCustomers);
+                        return;
+                    }
+                    const filteredCustomers = allCustomers.filter(customer =>
+                        customer.accountNumber.toLowerCase().includes(searchTerm) ||
+                        customer.name.toLowerCase().includes(searchTerm)
+                    );
+                    renderCustomers(filteredCustomers);
+                }, 300);
+            });
+
+            // Global function for delete confirmation
+            window.confirmDelete = function(accountNumber, name) {
+                customerToDelete = accountNumber;
+                document.getElementById('deleteCustomerAccount').innerHTML = sanitizeHTML(accountNumber);
+                document.getElementById('deleteCustomerName').innerHTML = sanitizeHTML(name);
+                deleteModal.show();
+            };
+
+            // Handle delete confirmation
+            document.getElementById('confirmDelete').addEventListener('click', async () => {
+                if (!customerToDelete) return;
+
+                try {
+                    const response = await fetch(`http://localhost:8080/Backend/resources/customers/${customerToDelete}`, { 
+                        method: 'DELETE' 
+                    });
+                    
+                    if (response.ok) {
+                        allCustomers = allCustomers.filter(customer => customer.accountNumber !== customerToDelete);
+                        updateStatistics();
+                        renderCustomers(allCustomers);
+                        showSuccessMessage('Customer deleted successfully!');
+                        deleteModal.hide();
+                    } else {
+                        let errorMessage = response.statusText;
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const errorData = await response.json();
+                            errorMessage = errorData.message || errorMessage;
+                        } else {
+                            errorMessage = await response.text() || errorMessage;
+                        }
+                        showError(`Error deleting customer: ${errorMessage}`);
+                    }
+                } catch (error) {
+                    showError(`Network error: ${error.message}`);
+                    console.error('Delete Error:', error);
+                }
+                
+                customerToDelete = null;
+            });
+
+            // Accessibility: Trap focus in modal
+            deleteModal._element.addEventListener('shown.bs.modal', () => {
+                const focusableElements = deleteModal._element.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+
+                deleteModal._element.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab') {
+                        if (e.shiftKey && document.activeElement === firstElement) {
+                            e.preventDefault();
+                            lastElement.focus();
+                        } else if (!e.shiftKey && document.activeElement === lastElement) {
+                            e.preventDefault();
+                            firstElement.focus();
+                        }
+                    }
+                });
+                firstElement.focus();
+            });
+
+            // Initialize
+            loadCustomers();
+        });
+    </script>
+</body>
+</html>

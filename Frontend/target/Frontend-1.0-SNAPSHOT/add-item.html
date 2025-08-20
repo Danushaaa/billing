@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pahana Edu - Add Item</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #f8fafc;
+            --accent-color: #10b981;
+            --text-dark: #1e293b;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-color: #059669;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .main-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: none;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient);
+        }
+
+        .card-header {
+            background: white;
+            border: none;
+            padding: 2.5rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .card-title {
+            color: var(--text-dark);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .card-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .card-body {
+            padding: 1rem 2rem 2.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            color: var(--text-dark);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fefefe;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background: white;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .form-control.with-icon {
+            padding-right: 3rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-secondary {
+            background: #64748b;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress {
+            height: 6px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--gradient);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .form-help {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        .navigation-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 1rem 1.5rem 2rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(90deg); }
+            50% { transform: translateY(-40px) rotate(180deg); }
+            75% { transform: translateY(-20px) rotate(270deg); }
+        }
+
+        .currency-input {
+            position: relative;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-weight: 500;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .form-control.with-currency {
+            padding-left: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape">
+            <i class="fas fa-box fa-3x"></i>
+        </div>
+        <div class="shape">
+            <i class="fas fa-tag fa-2x"></i>
+        </div>
+        <div class="shape">
+            <i class="fas fa-warehouse fa-4x"></i>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">
+                    <i class="fas fa-plus-circle text-primary"></i>
+                    Add New Item
+                </h1>
+                <p class="card-subtitle">Add inventory items to Pahana Edu Billing System</p>
+            </div>
+            
+            <div class="card-body">
+                <div class="progress-container">
+                    <div class="progress">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                    <small class="text-muted mt-2 d-block">Complete all required fields</small>
+                </div>
+
+                <div class="alert alert-success" id="successAlert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span id="successMessage"></span>
+                </div>
+                
+                <div class="alert alert-danger" id="errorAlert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span id="errorMessage"></span>
+                </div>
+
+                <form id="addItemForm">
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-info-circle text-primary"></i>
+                            Item Details
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="itemCode" class="form-label">Item Code *</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control with-icon" id="itemCode" 
+                                           required placeholder="e.g., ITM001">
+                                    <i class="fas fa-barcode input-icon"></i>
+                                </div>
+                                <div class="form-help">Unique identifier for the item</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="itemName" class="form-label">Item Name *</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control with-icon" id="itemName" 
+                                           required placeholder="Enter item name">
+                                    <i class="fas fa-tag input-icon"></i>
+                                </div>
+                                <div class="form-help">Descriptive name of the item</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-calculator text-primary"></i>
+                            Pricing & Inventory
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="unitPrice" class="form-label">Unit Price *</label>
+                                <div class="currency-input">
+                                    <span class="currency-symbol">LKR</span>
+                                    <input type="number" step="0.01" class="form-control with-currency with-icon" 
+                                           id="unitPrice" required placeholder="0.00" min="0">
+                                    <i class="fas fa-rupee-sign input-icon"></i>
+                                </div>
+                                <div class="form-help">Price per unit in Sri Lankan Rupees</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="quantityInStock" class="form-label">Quantity in Stock *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control with-icon" id="quantityInStock" 
+                                           required placeholder="0" min="0">
+                                    <i class="fas fa-boxes input-icon"></i>
+                                </div>
+                                <div class="form-help">Available quantity in inventory</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-primary position-relative">
+                            <span class="btn-text">
+                                <i class="fas fa-plus me-2"></i>
+                                Add Item to Inventory
+                            </span>
+                            <div class="loading">
+                                <div class="spinner"></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="navigation-section">
+                    <a href="manage-items.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>
+                        Back to Manage Items
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Form validation and progress tracking
+        const form = document.getElementById('addItemForm');
+        const inputs = form.querySelectorAll('input[required]');
+        const progressBar = document.getElementById('progressBar');
+        const successAlert = document.getElementById('successAlert');
+        const errorAlert = document.getElementById('errorAlert');
+
+        // Update progress bar based on filled inputs
+        function updateProgress() {
+            let filledInputs = 0;
+            inputs.forEach(input => {
+                if (input.value.trim() !== '' && input.checkValidity()) {
+                    filledInputs++;
+                }
+            });
+            const progress = (filledInputs / inputs.length) * 100;
+            progressBar.style.width = progress + '%';
+        }
+
+        // Add event listeners to all inputs
+        inputs.forEach(input => {
+            input.addEventListener('input', updateProgress);
+            input.addEventListener('blur', updateProgress);
+        });
+
+        // Show alert function
+        function showAlert(type, message) {
+            const alert = type === 'success' ? successAlert : errorAlert;
+            const messageElement = type === 'success' ? 
+                document.getElementById('successMessage') : 
+                document.getElementById('errorMessage');
+            
+            messageElement.textContent = message;
+            alert.style.display = 'block';
+            
+            // Hide other alert
+            const otherAlert = type === 'success' ? errorAlert : successAlert;
+            otherAlert.style.display = 'none';
+            
+            // Auto hide after 5 seconds
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+            
+            // Scroll to alert
+            alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Enhanced form submission
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const loading = submitBtn.querySelector('.loading');
+            
+            // Show loading state
+            btnText.style.opacity = '0';
+            loading.style.display = 'block';
+            submitBtn.disabled = true;
+
+            // Collect and validate form data
+            const itemCode = document.getElementById('itemCode').value.trim();
+            const itemName = document.getElementById('itemName').value.trim();
+            const unitPrice = parseFloat(document.getElementById('unitPrice').value);
+            const quantityInStock = parseInt(document.getElementById('quantityInStock').value);
+
+            // Enhanced validation
+            if (!itemCode || !itemName || isNaN(unitPrice) || isNaN(quantityInStock)) {
+                showAlert('error', 'Please fill all fields with valid data.');
+                resetButton();
+                return;
+            }
+
+            if (unitPrice < 0 || quantityInStock < 0) {
+                showAlert('error', 'Unit price and quantity must be non-negative values.');
+                resetButton();
+                return;
+            }
+
+            if (unitPrice === 0) {
+                showAlert('error', 'Unit price must be greater than zero.');
+                resetButton();
+                return;
+            }
+
+            const newItem = {
+                itemCode: itemCode,
+                itemName: itemName,
+                unitPrice: unitPrice,
+                quantityInStock: quantityInStock
+            };
+
+            try {
+                const response = await fetch('http://localhost:8080/Backend/resources/items', {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(newItem)
+                });
+
+                if (response.ok) {
+                    showAlert('success', `Item "${itemName}" (${itemCode}) has been added successfully!`);
+                    form.reset();
+                    updateProgress();
+                    
+                    // Celebrate with visual feedback
+                    celebrateSuccess();
+                } else {
+                    const errorText = await response.text();
+                    console.error('Server Response:', errorText);
+                    showAlert('error', `Failed to add item: ${errorText || response.statusText}`);
+                }
+            } catch (error) {
+                console.error('Network Error:', error);
+                showAlert('error', `Network error: Unable to connect to server. Please check your connection.`);
+            }
+
+            function resetButton() {
+                btnText.style.opacity = '1';
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+
+            resetButton();
+        });
+
+        // Success celebration effect
+        function celebrateSuccess() {
+            successAlert.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                successAlert.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        // Auto-format currency input
+        document.getElementById('unitPrice').addEventListener('input', function(e) {
+            const value = parseFloat(e.target.value);
+            if (!isNaN(value) && value >= 0) {
+                // Format to 2 decimal places when user stops typing
+                setTimeout(() => {
+                    if (e.target === document.activeElement) return;
+                    e.target.value = value.toFixed(2);
+                }, 1000);
+            }
+        });
+
+        // Validate item code format
+        document.getElementById('itemCode').addEventListener('input', function(e) {
+            let value = e.target.value.toUpperCase();
+            e.target.value = value;
+        });
+
+        // Initialize progress
+        updateProgress();
+    </script>
+</body>
+</html>

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pahana Edu - Cashier Registration</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary-color: #f8fafc;
+            --accent-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --text-dark: #1e293b;
+            --border-color: #e2e8f0;
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gradient);
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            border: none;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: var(--gradient);
+        }
+
+        .card-header {
+            background: white;
+            border: none;
+            padding: 2.5rem 2rem 1rem;
+            text-align: center;
+        }
+
+        .card-title {
+            color: var(--text-dark);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .card-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .card-body {
+            padding: 1rem 2rem 2.5rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            color: var(--text-dark);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fefefe;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+            background: white;
+            outline: none;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .form-control.with-icon {
+            padding-right: 3rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background: #64748b;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            background: #475569;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress {
+            height: 6px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--gradient);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .alert {
+            border: none;
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            color: #991b1b;
+            border-left: 4px solid #ef4444;
+        }
+
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .form-help {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            top: 60%;
+            right: 10%;
+            animation-delay: -5s;
+        }
+
+        .shape:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-20px) rotate(90deg); }
+            50% { transform: translateY(-40px) rotate(180deg); }
+            75% { transform: translateY(-20px) rotate(270deg); }
+        }
+
+        .navigation-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 1rem auto;
+                padding: 1.5rem;
+            }
+
+            .card-body {
+                padding: 1rem 1.5rem 2rem;
+            }
+            
+            .card-title {
+                font-size: 1.5rem;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape">
+            <i class="fas fa-user-plus fa-3x"></i>
+        </div>
+        <div class="shape">
+            <i class="fas fa-address-card fa-2x"></i>
+        </div>
+        <div class="shape">
+            <i class="fas fa-user-check fa-4x"></i>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">
+                    <i class="fas fa-user-plus text-primary"></i>
+                    Cashier Registration
+                </h1>
+                <p class="card-subtitle">Create a new cashier account for Pahana Edu Billing System</p>
+            </div>
+            
+            <div class="card-body">
+                <div class="progress-container">
+                    <div class="progress">
+                        <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                    </div>
+                    <small class="text-muted mt-2 d-block">Complete all required fields</small>
+                </div>
+
+                <div class="alert alert-success" id="successAlert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span id="successMessage"></span>
+                </div>
+                
+                <div class="alert alert-danger" id="errorAlert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    <span id="errorMessage"></span>
+                </div>
+
+                <form id="addCashierForm">
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-id-card text-primary"></i>
+                            Account Information
+                        </h3>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="cashierId" class="form-label">Cashier ID *</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control with-icon" id="cashierId" 
+                                           required aria-required="true" 
+                                           aria-describedby="cashierIdHelp">
+                                    <i class="fas fa-hashtag input-icon"></i>
+                                </div>
+                                <div class="form-help" id="cashierIdHelp">Unique identifier for the cashier account</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password" class="form-label">Password *</label>
+                                <div class="input-group">
+                                    <input type="password" class="form-control with-icon" id="password" 
+                                           pattern=".{8,}" required aria-required="true" 
+                                           title="Password must be at least 8 characters" 
+                                           aria-describedby="passwordHelp">
+                                    <i class="fas fa-lock input-icon"></i>
+                                </div>
+                                <div class="form-help" id="passwordHelp">Minimum 8 characters required</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-user text-primary"></i>
+                            Personal Details
+                        </h3>
+                        
+                        <div class="form-group">
+                            <label for="name" class="form-label">Full Name *</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control with-icon" id="name" 
+                                       required aria-required="true" 
+                                       aria-describedby="nameHelp">
+                                <i class="fas fa-user input-icon"></i>
+                            </div>
+                            <div class="form-help" id="nameHelp">Enter the cashier's full name</div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email Address *</label>
+                                <div class="input-group">
+                                    <input type="email" class="form-control with-icon" id="email" 
+                                           required aria-required="true" 
+                                           aria-describedby="emailHelp">
+                                    <i class="fas fa-envelope input-icon"></i>
+                                </div>
+                                <div class="form-help" id="emailHelp">Enter a valid email address</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="contact" class="form-label">Phone Number *</label>
+                                <div class="input-group">
+                                    <input type="tel" class="form-control with-icon" id="contact" 
+                                           pattern="\+94\d{9}" required aria-required="true" 
+                                           title="Enter a valid Sri Lankan number (e.g., +94123456789)" 
+                                           placeholder="+94123456789" 
+                                           aria-describedby="contactHelp">
+                                    <i class="fas fa-phone input-icon"></i>
+                                </div>
+                                <div class="form-help" id="contactHelp">Format: +94xxxxxxxxx</div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="NIC" class="form-label">National ID (NIC) *</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control with-icon" id="NIC" 
+                                           pattern="[0-9]{9}[vV]|[0-9]{12}" required aria-required="true" 
+                                           title="Enter a valid NIC (e.g., 123456789V or 123456789012)" 
+                                           placeholder="123456789V or 123456789012" 
+                                           aria-describedby="NICHelp">
+                                    <i class="fas fa-id-card-alt input-icon"></i>
+                                </div>
+                                <div class="form-help" id="NICHelp">Old format: 9 digits + V/v, New format: 12 digits</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="shiftHours" class="form-label">Shift Hours *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control with-icon" id="shiftHours" 
+                                           min="0" max="24" required aria-required="true" 
+                                           placeholder="0" 
+                                           aria-describedby="shiftHoursHelp">
+                                    <i class="fas fa-clock input-icon"></i>
+                                </div>
+                                <div class="form-help" id="shiftHoursHelp">Daily working hours (0-24)</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address" class="form-label">Address *</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control with-icon" id="address" 
+                                       required aria-required="true" 
+                                       aria-describedby="addressHelp">
+                                <i class="fas fa-map-marker-alt input-icon"></i>
+                            </div>
+                            <div class="form-help" id="addressHelp">Complete residential address</div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary position-relative" 
+                                aria-label="Register new cashier">
+                            <span class="btn-text">
+                                <i class="fas fa-user-plus me-2"></i>
+                                Register Cashier
+                            </span>
+                            <div class="loading">
+                                <div class="spinner"></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+
+                <div class="navigation-section">
+                    <div class="d-flex justify-content-center align-items-center flex-wrap gap-3">
+                        <a href="manage-cashiers.html" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>
+                            Back to Manage Cashiers
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('addCashierForm');
+            const inputs = form.querySelectorAll('input[required]');
+            const progressBar = document.getElementById('progressBar');
+            const successAlert = document.getElementById('successAlert');
+            const errorAlert = document.getElementById('errorAlert');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const btnText = submitBtn.querySelector('.btn-text');
+            const loading = submitBtn.querySelector('.loading');
+
+            // Sanitize input to prevent XSS
+            function sanitizeInput(str) {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            }
+
+            // Update progress bar based on filled inputs
+            function updateProgress() {
+                let filledInputs = 0;
+                inputs.forEach(input => {
+                    if (input.value.trim() !== '' && input.checkValidity()) {
+                        filledInputs++;
+                    }
+                });
+                const progress = (filledInputs / inputs.length) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+
+            // Show alert function
+            function showAlert(type, message) {
+                const alert = type === 'success' ? successAlert : errorAlert;
+                const messageElement = type === 'success' ? 
+                    document.getElementById('successMessage') : 
+                    document.getElementById('errorMessage');
+                
+                messageElement.innerHTML = sanitizeInput(message);
+                alert.style.display = 'block';
+                
+                // Hide other alert
+                const otherAlert = type === 'success' ? errorAlert : successAlert;
+                otherAlert.style.display = 'none';
+                
+                // Auto hide after 5 seconds
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                }, 5000);
+                
+                // Scroll to alert
+                alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            // Reset button state
+            function resetButton() {
+                btnText.style.opacity = '1';
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+
+            // Form submission
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                // Show loading state
+                btnText.style.opacity = '0';
+                loading.style.display = 'block';
+                submitBtn.disabled = true;
+
+                // Collect form data
+                const cashier = {
+                    cashierId: document.getElementById('cashierId').value.trim(),
+                    name: document.getElementById('name').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    contact: document.getElementById('contact').value.trim(),
+                    address: document.getElementById('address').value.trim(),
+                    NIC: document.getElementById('NIC').value.trim(),
+                    password: document.getElementById('password').value,
+                    shiftHours: parseInt(document.getElementById('shiftHours').value)
+                };
+
+                // Validate required fields
+                if (Object.values(cashier).some(field => !field || (typeof field === 'number' && isNaN(field)))) {
+                    showAlert('error', 'Please fill in all required fields correctly.');
+                    resetButton();
+                    return;
+                }
+
+                try {
+                    const response = await fetch('http://localhost:8080/Backend/resources/cashiers', {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(cashier)
+                    });
+
+                    if (response.ok) {
+                        showAlert('success', `Cashier "${sanitizeInput(cashier.name)}" has been registered successfully!`);
+                        form.reset();
+                        updateProgress();
+                    } else {
+                        let errorMessage = response.statusText;
+                        const contentType = response.headers.get('content-type');
+                        if (contentType && contentType.includes('application/json')) {
+                            const errorData = await response.json();
+                            errorMessage = errorData.message || errorMessage;
+                        } else {
+                            errorMessage = await response.text() || errorMessage;
+                        }
+                        showAlert('error', `Registration failed: ${sanitizeInput(errorMessage)}`);
+                    }
+                } catch (error) {
+                    showAlert('error', `Network error: Unable to connect to server. Please check your connection.`);
+                    console.error('Network Error:', error);
+                }
+
+                resetButton();
+            });
+
+            // Auto-format phone number
+            document.getElementById('contact').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length > 0 && !value.startsWith('94')) {
+                    if (value.startsWith('0')) {
+                        value = '94' + value.substring(1);
+                    } else {
+                        value = '94' + value;
+                    }
+                }
+                e.target.value = value ? '+' + value : '';
+            });
+
+            // Accessibility: Trap focus in form
+            form.addEventListener('keydown', (e) => {
+                if (e.key === 'Tab') {
+                    const focusableElements = form.querySelectorAll('input, button, [href], select, textarea, [tabindex]:not([tabindex="-1"])');
+                    const firstElement = focusableElements[0];
+                    const lastElement = focusableElements[focusableElements.length - 1];
+
+                    if (e.shiftKey && document.activeElement === firstElement) {
+                        e.preventDefault();
+                        lastElement.focus();
+                    } else if (!e.shiftKey && document.activeElement === lastElement) {
+                        e.preventDefault();
+                        firstElement.focus();
+                    }
+                }
+            });
+
+            // Initialize progress
+            updateProgress();
+
+            // Add input event listeners for real-time validation
+            inputs.forEach(input => {
+                input.addEventListener('input', updateProgress);
+                input.addEventListener('blur', updateProgress);
+            });
+        });
+    </script>
+</body>
+</html>

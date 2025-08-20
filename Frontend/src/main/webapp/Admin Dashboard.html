@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Pahana Edu Billing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        
+        :root {
+            /* Dark Theme Colors */
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #0f0f1a;
+            --bg-tertiary: #1a1a2e;
+            --surface-primary: rgba(20, 20, 35, 0.8);
+            --surface-secondary: rgba(25, 25, 45, 0.6);
+            --surface-glass: rgba(255, 255, 255, 0.05);
+            --surface-hover: rgba(255, 255, 255, 0.08);
+            
+            /* Neon Gradients */
+            --neon-blue: linear-gradient(135deg, #00d4ff, #0080ff);
+            --neon-purple: linear-gradient(135deg, #7928ca, #ff0080);
+            --neon-green: linear-gradient(135deg, #00f5a0, #00d9f5);
+            --neon-orange: linear-gradient(135deg, #ff6b35, #f7931e);
+            --neon-pink: linear-gradient(135deg, #ff0080, #7928ca);
+            --neon-cyan: linear-gradient(135deg, #4ecdc4, #44a08d);
+            
+            /* Text Colors */
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --text-accent: #00d4ff;
+            
+            /* Shadows */
+            --shadow-dark: 0 20px 60px rgba(0, 0, 0, 0.4);
+            --shadow-neon: 0 0 30px rgba(0, 212, 255, 0.3);
+            --shadow-glow: 0 0 50px rgba(121, 40, 202, 0.2);
+            --shadow-strong: 0 25px 80px rgba(0, 0, 0, 0.6);
+            
+            /* Borders */
+            --border-glass: 1px solid rgba(255, 255, 255, 0.1);
+            --border-neon: 1px solid rgba(0, 212, 255, 0.3);
+            --border-glow: 2px solid rgba(121, 40, 202, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.05) 0%, transparent 50%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Premium Dark Background Animation */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            overflow: hidden;
+        }
+
+        .dark-grid {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridFloat 20s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes gridFloat {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .neon-orbs {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: orbFloat 15s ease-in-out infinite;
+        }
+
+        .orb1 {
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, #00d4ff, #0080ff);
+            top: 10%;
+            left: 15%;
+            animation-delay: 0s;
+        }
+
+        .orb2 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #7928ca, #ff0080);
+            top: 60%;
+            right: 20%;
+            animation-delay: 5s;
+        }
+
+        .orb3 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #00f5a0, #00d9f5);
+            bottom: 15%;
+            left: 60%;
+            animation-delay: 10s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { 
+                transform: translate(0, 0) scale(1); 
+                opacity: 0.4;
+            }
+            33% { 
+                transform: translate(50px, -50px) scale(1.2); 
+                opacity: 0.7;
+            }
+            66% { 
+                transform: translate(-30px, 30px) scale(0.8); 
+                opacity: 0.5;
+            }
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1600px;
+            margin: 2rem auto;
+            background: var(--surface-primary);
+            backdrop-filter: blur(25px);
+            border: var(--border-glass);
+            border-radius: 32px;
+            padding: 3.5rem;
+            box-shadow: var(--shadow-strong);
+            position: relative;
+            animation: containerAppear 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            overflow: hidden;
+        }
+
+        .main-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--neon-blue);
+            border-radius: 32px 32px 0 0;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+
+        .main-container::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            border-radius: 34px;
+            z-index: -1;
+            opacity: 0;
+            animation: borderGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes containerAppear {
+            from {
+                opacity: 0;
+                transform: translateY(100px) scale(0.9);
+                filter: blur(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes borderGlow {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Enhanced Dark Welcome Banner */
+        .welcome-banner {
+            background: var(--surface-secondary);
+            backdrop-filter: blur(20px);
+            border: var(--border-glass);
+            padding: 2.5rem;
+            border-radius: 24px;
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-dark);
+        }
+
+        .welcome-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            animation: rotate 8s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .welcome-banner h3 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--neon-blue);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .welcome-banner p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .time-display {
+            font-size: 1rem;
+            color: var(--text-accent);
+            margin-bottom: 2rem;
+            font-weight: 500;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            background: var(--surface-glass);
+            color: var(--text-primary);
+            border: var(--border-glass);
+            padding: 1rem 2rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(15px);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .quick-btn:hover::before {
+            left: 100%;
+        }
+
+        .quick-btn:hover {
+            background: var(--surface-hover);
+            color: var(--text-accent);
+            text-decoration: none;
+            transform: translateY(-3px);
+            border-color: rgba(0, 212, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        /* Dark Theme Top Bar */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .dashboard-title {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            font-size: 2.8rem;
+            font-weight: 900;
+            margin: 0;
+            position: relative;
+        }
+
+        .dashboard-title i {
+            background: var(--neon-purple);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3rem;
+            animation: iconPulse 2s ease-in-out infinite alternate;
+            filter: drop-shadow(0 0 10px rgba(121, 40, 202, 0.6));
+        }
+
+        @keyframes iconPulse {
+            0% { 
+                transform: scale(1);
+                filter: drop-shadow(0 0 10px rgba(121, 40, 202, 0.6));
+            }
+            100% { 
+                transform: scale(1.05);
+                filter: drop-shadow(0 0 20px rgba(255, 0, 128, 0.8));
+            }
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .user-avatar {
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            background: var(--neon-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.5rem;
+            box-shadow: 0 0 25px rgba(121, 40, 202, 0.5);
+            transition: all 0.4s ease;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-avatar::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            background: var(--neon-purple);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .user-avatar:hover::before {
+            opacity: 0.3;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 35px rgba(255, 0, 128, 0.7);
+        }
+
+        .user-details h6 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        .user-details small {
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .logout-btn {
+            background: var(--surface-glass);
+            color: var(--text-primary);
+            border: var(--border-glass);
+            padding: 1.2rem 2.5rem;
+            border-radius: 18px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            backdrop-filter: blur(15px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logout-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 0, 128, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .logout-btn:hover::before {
+            left: 100%;
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-3px);
+            background: var(--surface-hover);
+            border-color: rgba(255, 0, 128, 0.5);
+            color: #ff0080;
+            box-shadow: 0 15px 40px rgba(255, 0, 128, 0.3);
+        }
+
+        /* Dark Theme Action Cards */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+
+        .action-card {
+            background: var(--surface-secondary);
+            backdrop-filter: blur(20px);
+            border: var(--border-glass);
+            border-radius: 28px;
+            padding: 3.5rem;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-primary);
+            box-shadow: var(--shadow-dark);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            animation: cardSlideIn 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .action-card:nth-child(1) { animation-delay: 0.3s; }
+        .action-card:nth-child(2) { animation-delay: 0.5s; }
+        .action-card:nth-child(3) { animation-delay: 0.7s; }
+        .action-card:nth-child(4) { animation-delay: 0.9s; }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+            transition: left 0.8s ease;
+        }
+
+        .action-card:hover::before {
+            left: 100%;
+        }
+
+        .action-card::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+            border-radius: 30px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .action-card:hover::after {
+            opacity: 1;
+        }
+
+        .action-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: var(--shadow-strong), var(--shadow-neon);
+            text-decoration: none;
+            color: var(--text-primary);
+            border-color: rgba(0, 212, 255, 0.5);
+        }
+
+        .action-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            transition: all 0.5s ease;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .customers-card .action-icon {
+            background: var(--neon-blue);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+        }
+
+        .cashiers-card .action-icon {
+            background: var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(78, 205, 196, 0.5);
+        }
+
+        .items-card .action-icon {
+            background: var(--neon-green);
+            box-shadow: 0 0 30px rgba(0, 245, 160, 0.5);
+        }
+
+        .billing-card .action-icon {
+            background: var(--neon-orange);
+            box-shadow: 0 0 30px rgba(255, 107, 53, 0.5);
+        }
+
+        .action-card:hover .action-icon {
+            transform: scale(1.2) rotate(15deg);
+        }
+
+        .action-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            transition: all 0.4s ease;
+        }
+
+        .action-card:hover .action-title {
+            background: var(--neon-blue);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .action-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+            font-weight: 400;
+        }
+
+        .action-features {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-badge {
+            background: var(--surface-glass);
+            color: var(--text-accent);
+            border: var(--border-glass);
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .action-card:hover .feature-badge {
+            background: var(--surface-hover);
+            transform: translateY(-2px);
+            border-color: rgba(0, 212, 255, 0.3);
+        }
+
+        /* Enhanced Dark Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: var(--neon-pink);
+            color: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 800;
+            animation: neonPulse 2s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255, 0, 128, 0.6);
+            border: 2px solid var(--bg-primary);
+        }
+
+        @keyframes neonPulse {
+            0%, 100% { 
+                transform: scale(1);
+                box-shadow: 0 0 20px rgba(255, 0, 128, 0.6);
+            }
+            50% { 
+                transform: scale(1.1);
+                box-shadow: 0 0 30px rgba(255, 0, 128, 0.9);
+            }
+        }
+
+        /* Dark Theme Loading */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            animation: loaderFadeOut 0.8s ease-out 2.5s forwards;
+        }
+
+        .loader-icon {
+            color: var(--text-accent);
+            font-size: 4rem;
+            animation: loaderSpin 2s linear infinite;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
+        }
+
+        .loader-text {
+            color: var(--text-secondary);
+            font-size: 1.3rem;
+            font-weight: 600;
+            animation: textPulse 2s ease-in-out infinite;
+            text-align: center;
+        }
+
+        @keyframes loaderSpin {
+            from { transform: rotate(0deg) scale(1); }
+            25% { transform: rotate(90deg) scale(1.1); }
+            50% { transform: rotate(180deg) scale(1); }
+            75% { transform: rotate(270deg) scale(1.1); }
+            to { transform: rotate(360deg) scale(1); }
+        }
+
+        @keyframes textPulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes loaderFadeOut {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+
+        @keyframes cardSlideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0) scale(1);
+            }
+        }
+
+        /* Responsive Dark Design */
+        @media (max-width: 1024px) {
+            .main-container {
+                margin: 1.5rem;
+                padding: 3rem 2.5rem;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                margin: 1rem;
+                padding: 2.5rem 2rem;
+                border-radius: 24px;
+            }
+            
+            .dashboard-title {
+                font-size: 2.2rem;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                gap: 2rem;
+                text-align: center;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .action-card {
+                padding: 3rem 2.5rem;
+            }
+
+            .welcome-banner h3 {
+                font-size: 1.8rem;
+            }
+
+            .quick-actions {
+                gap: 1rem;
+            }
+
+            .quick-btn {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .dashboard-title {
+                font-size: 1.9rem;
+            }
+            
+            .action-card {
+                padding: 2.5rem 2rem;
+            }
+
+            .action-icon {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+
+            .action-title {
+                font-size: 1.5rem;
+            }
+
+            .welcome-banner {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        /* Additional Premium Effects */
+        .ripple-effect {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.4), transparent);
+            transform: scale(0);
+            animation: darkRipple 0.8s ease-out;
+            pointer-events: none;
+        }
+
+        @keyframes darkRipple {
+            to {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        .success-toast {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: var(--surface-secondary);
+            backdrop-filter: blur(20px);
+            border: var(--border-glass);
+            color: var(--text-primary);
+            padding: 1.5rem 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-dark), var(--shadow-neon);
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.5s ease;
+        }
+
+        .success-toast.show {
+            transform: translateX(0);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px currentColor;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-blue);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-purple);
+        }
+    </style>
+</head>
+<body>
+    <!-- Premium Dark Page Loader -->
+    <div class="page-loader">
+        <i class="fas fa-rocket loader-icon"></i>
+        <div class="loader-text">Loading Pahana Edu Dashboard...</div>
+    </div>
+
+    <!-- Dark Animated Background -->
+    <div class="bg-animation">
+        <div class="dark-grid"></div>
+        <div class="neon-orbs">
+            <div class="orb orb1"></div>
+            <div class="orb orb2"></div>
+            <div class="orb orb3"></div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="main-container">
+            <!-- Premium Dark Welcome Banner -->
+            <div class="welcome-banner">
+                <div class="welcome-content">
+                    <h3><i class="fas fa-star glow-text"></i> Welcome to Pahana Edu Billing</h3>
+                    <p>Experience next-generation educational billing management with advanced dark interface</p>
+                    <div class="time-display" id="currentDateTime"></div>
+                    <div class="quick-actions">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Premium Dark Top Bar -->
+            <div class="top-bar">
+                <h1 class="dashboard-title glow-text">
+                    <i class="fas fa-shield-alt"></i>
+                    Admin Dashboard
+                </h1>
+                <div class="user-info">
+                    <div class="user-details text-end">
+                        <h6>Admin User</h6>
+                        <small>System Administrator</small>
+                        <div class="time-display" id="lastLogin">Last login: Today at 9:30 AM</div>
+                    </div>
+                    <div class="user-avatar">
+                        <i class="fas fa-user-crown"></i>
+                    </div>
+                    <button class="logout-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- Premium Dark Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Manage Customers -->
+                <a href="manage-customers.html" class="action-card customers-card">
+                    <div class="action-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="action-title">Manage Customers</div>
+                    
+                    <div class="action-features">
+                        <span class="feature-badge">Add</span>
+                        <span class="feature-badge">Edit</span>
+                        <span class="feature-badge">View</span>
+                        <span class="feature-badge">Update</span>
+                    </div>
+                    
+                </a>
+                
+                <!-- Manage Cashiers -->
+                <a href="manage- cashiers.html" class="action-card cashiers-card">
+                    <div class="action-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="action-title">Manage Cashiers</div>
+                    
+                    <div class="action-features">
+                        <span class="feature-badge">Add</span>
+                        <span class="feature-badge">Edit</span>
+                        <span class="feature-badge">View</span>
+                        <span class="feature-badge">Update</span>
+                    </div>
+                    
+                </a>
+
+                <!-- Manage Items -->
+                <a href="manage-items.html" class="action-card items-card">
+                    <div class="action-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <div class="action-title">Manage Items</div>
+                    
+                    <div class="action-features">
+                       <span class="feature-badge">Add</span>
+                        <span class="feature-badge">Edit</span>
+                        <span class="feature-badge">View</span>
+                        <span class="feature-badge">Update</span>
+                    </div>
+                </a>
+
+                <!-- Smart Billing -->
+                <a href="billing.html" class="action-card billing-card">
+                    <div class="action-icon">
+                        <i class="fas fa-receipt"></i>
+                    </div>
+                    <div class="action-title">Smart Billing</div>
+                    
+                    <div class="action-features">
+                        <span class="feature-badge">Place Order</span>
+                        <span class="feature-badge">Genarate Bill</span>
+                        <span class="feature-badge">Print Bill</span>
+                        <span class="feature-badge">Update</span>
+                    </div>
+                    
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remove page loader with enhanced animation
+            setTimeout(() => {
+                const loader = document.querySelector('.page-loader');
+                if (loader) {
+                    loader.style.opacity = '0';
+                    loader.style.transform = 'scale(0.9)';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 600);
+                }
+            }, 2500);
+
+            // Update time display
+            function updateTime() {
+                const now = new Date();
+                const options = { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                };
+                const timeDisplay = document.getElementById('currentDateTime');
+                if (timeDisplay) {
+                    timeDisplay.textContent = now.toLocaleDateString('en-US', options);
+                }
+            }
+            
+            updateTime();
+            setInterval(updateTime, 60000); // Update every minute
+
+            // Dynamic greeting
+            const now = new Date();
+            const hour = now.getHours();
+            let greeting = 'Good Morning';
+            if (hour >= 12 && hour < 17) greeting = 'Good Afternoon';
+            else if (hour >= 17) greeting = 'Good Evening';
+            
+            const welcomeText = document.querySelector('.welcome-banner h3');
+            if (welcomeText) {
+                welcomeText.innerHTML = `<i class="fas fa-star glow-text"></i> ${greeting}! Welcome to Pahana Edu Billing`;
+            }
+
+            // Enhanced click effects with dark theme ripples
+            const actionCards = document.querySelectorAll('.action-card');
+            actionCards.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Create dark themed ripple effect
+                    const ripple = document.createElement('div');
+                    const rect = card.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.className = 'ripple-effect';
+                    ripple.style.cssText = `
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                    `;
+                    
+                    card.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 800);
+                });
+            });
+
+            // Enhanced logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const confirmLogout = confirm('Are you sure you want to logout?');
+                if (confirmLogout) {
+                    // Add logout animation
+                    document.body.style.animation = 'fadeOut 0.8s ease-out forwards';
+                    document.body.style.animationFillMode = 'forwards';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 800);
+                }
+            });
+
+            // Add custom CSS animations
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeOut {
+                    to {
+                        opacity: 0;
+                        transform: scale(0.9);
+                        filter: blur(5px);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+
+            // Enhanced intersection observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.action-card').forEach(card => {
+                observer.observe(card);
+            });
+
+            // Add smooth scrolling behavior
+            document.documentElement.style.scrollBehavior = 'smooth';
+
+            // Console welcome message
+            console.log('%cPahana Edu Dashboard', 'color: #00d4ff; font-size: 24px; font-weight: bold;');
+            console.log('%cPremium Dark Theme Loaded Successfully', 'color: #7928ca; font-size: 14px;');
+        });
+    </script>
+</body>
+</html>

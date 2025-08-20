@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cashier Management - Pahana Edu Billing System</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #3b82f6;
+      --primary-dark: #2563eb;
+      --secondary-color: #8b5cf6;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --danger-color: #ef4444;
+      --dark-color: #1f2937;
+      --light-gray: #f8fafc;
+      --medium-gray: #64748b;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: var(--dark-color);
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .main-wrapper {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 2rem 0;
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 3rem;
+      box-shadow: var(--shadow-xl);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .header-section {
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .header-section::before {
+      content: '';
+      position: absolute;
+      bottom: -1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      border-radius: 2px;
+    }
+
+    .main-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .main-title i {
+      color: var(--primary-color);
+      font-size: 2.2rem;
+    }
+
+    .main-subtitle {
+      font-size: 1.1rem;
+      color: var(--medium-gray);
+      font-weight: 400;
+      margin-top: 1rem;
+    }
+
+    .actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .action-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2.5rem;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: var(--shadow-md);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid transparent;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .action-card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-xl);
+      text-decoration: none;
+      color: inherit;
+      border-color: var(--primary-color);
+    }
+
+    .action-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .action-card:hover .action-icon {
+      transform: scale(1.1);
+      color: var(--primary-color);
+    }
+
+    .action-card:hover .action-title {
+      color: var(--primary-color);
+    }
+
+    .action-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .action-icon i {
+      font-size: 2rem;
+      color: white;
+    }
+
+    .action-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: var(--dark-color);
+      transition: color 0.3s ease;
+    }
+
+    .action-desc {
+      color: var(--medium-gray);
+      font-size: 1rem;
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    .back-section {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .btn-back {
+      background: linear-gradient(135deg, var(--medium-gray), #475569);
+      border: none;
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 12px;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-back:hover {
+      background: linear-gradient(135deg, #475569, #334155);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      color: white;
+      text-decoration: none;
+    }
+
+    .stats-banner {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .stats-text {
+      text-align: center;
+      color: var(--medium-gray);
+      font-size: 0.95rem;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        margin: 1rem;
+        padding: 2rem;
+        border-radius: 20px;
+      }
+
+      .main-title {
+        font-size: 2rem;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .actions-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .action-card {
+        padding: 2rem;
+      }
+
+      .action-icon {
+        width: 70px;
+        height: 70px;
+      }
+
+      .action-icon i {
+        font-size: 1.8rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .main-container {
+        padding: 1.5rem;
+      }
+
+      .main-title {
+        font-size: 1.8rem;
+      }
+
+      .action-card {
+        padding: 1.5rem;
+      }
+    }
+
+    /* Animation for page load */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .main-container {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .action-card {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .action-card:nth-child(1) { animation-delay: 0.1s; }
+    .action-card:nth-child(2) { animation-delay: 0.2s; }
+    .action-card:nth-child(3) { animation-delay: 0.3s; }
+  </style>
+</head>
+<body>
+  <div class="main-wrapper">
+    <div class="container">
+      <div class="main-container">
+        <!-- Header Section -->
+        <div class="header-section">
+          <h1 class="main-title">
+            <i class="fas fa-users"></i>
+            Cashier Management
+          </h1>
+          <p class="main-subtitle">Streamline your cashier operations with our comprehensive management tools</p>
+        </div>
+
+        <!-- Stats Banner -->
+        <div class="stats-banner">
+          <p class="stats-text">
+            <i class="fas fa-info-circle me-2"></i>
+            Manage all your cashier data efficiently with our intuitive interface
+          </p>
+        </div>
+
+        <!-- Actions Grid -->
+        <div class="actions-grid">
+          <!-- Add Cashier -->
+          <a href="cashier registration.html" class="action-card">
+            <div class="action-icon">
+              <i class="fas fa-user-plus"></i>
+            </div>
+            <div class="action-title">Add New Cashier</div>
+            <div class="action-desc">Register and onboard new cashiers into your system with detailed information capture</div>
+          </a>
+
+          
+
+          <!-- Edit Cashier -->
+          <a href="edit- casiers.html" class="action-card">
+            <div class="action-icon">
+              <i class="fas fa-user-edit"></i>
+            </div>
+            <div class="action-title">Edit Cashier Details</div>
+            <div class="action-desc">Update and modify existing cashier information, preferences, and account details</div>
+          </a>
+        </div>
+
+        <!-- Back Section -->
+        <div class="back-section">
+          <a href="Admin Dashboard.html" class="btn-back">
+            <i class="fas fa-arrow-left"></i>
+            Back to Dashboard
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Add smooth scroll behavior and enhanced interactions
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add click animation to action cards
+      const actionCards = document.querySelectorAll('.action-card');
+      
+      actionCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+          // Create ripple effect
+          const ripple = document.createElement('div');
+          const rect = card.getBoundingClientRect();
+          const size = 60;
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top - size / 2;
+          
+          ripple.style.cssText = `
+            position: absolute;
+            width: ${size}px;
+            height: ${size}px;
+            background: rgba(59, 130, 246, 0.3);
+            border-radius: 50%;
+            transform: scale(0);
+            left: ${x}px;
+            top: ${y}px;
+            pointer-events: none;
+            animation: ripple 0.6s ease-out;
+          `;
+          
+          card.style.position = 'relative';
+          card.appendChild(ripple);
+          
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
+        });
+      });
+      
+      // Add ripple animation
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes ripple {
+          to {
+            transform: scale(4);
+            opacity: 0;
+          }
+        }
+      `;
+      document.head.appendChild(style);
+    });
+  </script>
+</body>
+</html>
