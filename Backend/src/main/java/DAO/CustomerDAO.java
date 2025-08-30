@@ -20,7 +20,7 @@ import java.util.List;
 
 public class CustomerDAO {
     public boolean addCustomer(Customer customer) throws SQLException {
-        String sql = "INSERT INTO customer (account_number, nme, email, contact, address, NIC, password, units_consumed) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO customer (account_number, name, email, contact, address, NIC, password, units_consumed) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, customer.getAccountNumber());

@@ -101,4 +101,27 @@ public class CashierDAO {
             return rowsAffected > 0;
         }
     }
+
+    public Cashier authenticate(String cashierId, String password) throws SQLException {
+        String sql = "SELECT * FROM cashier WHERE cashier_id = ? AND password = ?";
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cashierId);
+            stmt.setString(2, password);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Cashier(
+                    rs.getString("cashier_id"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("contact"),
+                    rs.getString("address"),
+                    rs.getString("NIC"),
+                    rs.getString("password"),
+                    rs.getInt("shift_hours")
+                );
+            }
+        }
+        return null;
+    }
 }

@@ -3,47 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashier - Pahana Edu Billing</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Pahana Edu - Cashier Access</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
-        :root {
-            /* Dark Theme Colors */
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #0f0f1a;
-            --bg-tertiary: #1a1a2e;
-            --surface-primary: rgba(20, 20, 35, 0.8);
-            --surface-secondary: rgba(25, 25, 45, 0.6);
-            --surface-glass: rgba(255, 255, 255, 0.05);
-            --surface-hover: rgba(255, 255, 255, 0.08);
-            
-            /* Neon Gradients */
-            --neon-blue: linear-gradient(135deg, #00d4ff, #0080ff);
-            --neon-purple: linear-gradient(135deg, #7928ca, #ff0080);
-            --neon-green: linear-gradient(135deg, #00f5a0, #00d9f5);
-            --neon-orange: linear-gradient(135deg, #ff6b35, #f7931e);
-            --neon-pink: linear-gradient(135deg, #ff0080, #7928ca);
-            --neon-cyan: linear-gradient(135deg, #4ecdc4, #44a08d);
-            
-            /* Text Colors */
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.7);
-            --text-muted: rgba(255, 255, 255, 0.5);
-            --text-accent: #00d4ff;
-            
-            /* Shadows */
-            --shadow-dark: 0 20px 60px rgba(0, 0, 0, 0.4);
-            --shadow-neon: 0 0 30px rgba(0, 212, 255, 0.3);
-            --shadow-glow: 0 0 50px rgba(121, 40, 202, 0.2);
-            --shadow-strong: 0 25px 80px rgba(0, 0, 0, 0.6);
-            
-            /* Borders */
-            --border-glass: 1px solid rgba(255, 255, 255, 0.1);
-            --border-neon: 1px solid rgba(0, 212, 255, 0.3);
-            --border-glow: 2px solid rgba(121, 40, 202, 0.4);
-        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
         * {
             margin: 0;
@@ -52,40 +15,31 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.05) 0%, transparent 50%);
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
             min-height: 100vh;
-            color: var(--text-primary);
-            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .bg-animation {
-            position: fixed;
+        .cyber-grid {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
-            overflow: hidden;
-        }
-
-        .dark-grid {
-            position: absolute;
-            width: 100%;
-            height: 100%;
             background-image: 
-                linear-gradient(rgba(0, 212, 255, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.1) 1px, transparent 1px);
+                linear-gradient(rgba(0, 255, 255, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.1) 1px, transparent 1px);
             background-size: 50px 50px;
-            animation: gridFloat 20s linear infinite;
-            opacity: 0.3;
+            animation: gridMove 20s linear infinite;
+            z-index: -2;
         }
 
-        @keyframes gridFloat {
+        @keyframes gridMove {
             0% { transform: translate(0, 0); }
             100% { transform: translate(50px, 50px); }
         }
@@ -100,381 +54,641 @@
         .orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: orbFloat 15s ease-in-out infinite;
+            filter: blur(60px);
+            opacity: 0.7;
+            animation: orbFloat 12s ease-in-out infinite;
         }
 
         .orb1 {
-            width: 350px;
-            height: 350px;
-            background: radial-gradient(circle, #00d4ff, #0080ff);
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #ff0080, #7928ca);
             top: 10%;
-            left: 15%;
+            left: 20%;
             animation-delay: 0s;
         }
 
         .orb2 {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle, #7928ca, #ff0080);
-            top: 60%;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #00d4ff, #0080ff);
+            top: 70%;
             right: 20%;
-            animation-delay: 5s;
+            animation-delay: 4s;
         }
 
         .orb3 {
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, #00f5a0, #00d9f5);
-            bottom: 15%;
-            left: 60%;
-            animation-delay: 10s;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #ff6b35, #f7931e);
+            bottom: 20%;
+            left: 10%;
+            animation-delay: 8s;
         }
 
         @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
-            33% { transform: translate(50px, -50px) scale(1.2); opacity: 0.7; }
-            66% { transform: translate(-30px, 30px) scale(0.8); opacity: 0.5; }
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
         }
 
         .main-container {
-            display: flex;
-            max-width: 1400px;
-            margin: 2rem auto;
-            background: var(--surface-primary);
-            backdrop-filter: blur(25px);
-            border: var(--border-glass);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 90vw;
+            max-width: 1200px;
+            height: 80vh;
+            background: rgba(15, 15, 15, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 0 60px rgba(0, 255, 255, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
             overflow: hidden;
-            box-shadow: var(--shadow-strong);
-            animation: containerAppear 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
         }
 
-        .main-container::before {
+        .brand-section {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .brand-section::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--neon-blue);
-            border-radius: 24px 24px 0 0;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grain)"/></svg>');
+            opacity: 0.4;
         }
 
-        .main-container::after {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.1), transparent);
-            border-radius: 26px;
-            z-index: -1;
-            opacity: 0;
-            animation: borderGlow 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes containerAppear {
-            from { opacity: 0; transform: translateY(100px) scale(0.9); filter: blur(10px); }
-            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-        }
-
-        @keyframes borderGlow { 0% { opacity: 0; } 100% { opacity: 1; } }
-
-        .sidebar {
-            width: 250px;
-            background: var(--surface-secondary);
-            backdrop-filter: blur(20px);
-            border-right: var(--border-glass);
-            padding: 2rem 1rem;
-            height: calc(100% - 4rem);
-            position: sticky;
-            top: 2rem;
-            transition: width 0.3s ease;
-        }
-
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            color: var(--text-primary);
-            text-decoration: none;
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
-            margin-bottom: 0.5rem;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar a i {
-            margin-right: 0.8rem;
-            font-size: 1.2rem;
-        }
-
-        .sidebar a:hover, .sidebar a.active {
-            background: var(--surface-hover);
-            color: var(--text-accent);
-            transform: translateX(5px);
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
-        }
-
-        .top-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 2rem;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .dashboard-title {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--text-accent);
-        }
-
-        .dashboard-title i {
-            background: var(--neon-purple);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 2.2rem;
-            animation: iconPulse 2s ease-in-out infinite alternate;
-            filter: drop-shadow(0 0 10px rgba(121, 40, 202, 0.6));
-        }
-
-        @keyframes iconPulse {
-            0% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(121, 40, 202, 0.6)); }
-            100% { transform: scale(1.05); filter: drop-shadow(0 0 20px rgba(255, 0, 128, 0.8)); }
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--neon-purple);
+        .brand-logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(45deg, #ff0080, #7928ca, #0080ff);
+            border-radius: 30px;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+            animation: logoGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes logoGlow {
+            0% { 
+                box-shadow: 0 0 30px rgba(255, 0, 128, 0.5);
+                transform: scale(1);
+            }
+            100% { 
+                box-shadow: 0 0 50px rgba(121, 40, 202, 0.8), 0 0 80px rgba(0, 128, 255, 0.3);
+                transform: scale(1.05);
+            }
+        }
+
+        .brand-logo i {
+            font-size: 50px;
             color: white;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+
+        .brand-title {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #00d4ff, #7928ca, #ff0080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: titleShimmer 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleShimmer {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(30deg); }
+        }
+
+        .brand-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .tagline {
+            margin-top: 30px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            text-align: center;
+            line-height: 1.6;
+            max-width: 300px;
+        }
+
+        .login-section {
+            padding: 80px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: rgba(20, 20, 20, 0.8);
+            position: relative;
+        }
+
+        .login-header {
+            margin-bottom: 50px;
+        }
+
+        .login-title {
+            font-size: 32px;
             font-weight: 700;
-            font-size: 1.2rem;
-            box-shadow: 0 0 20px rgba(121, 40, 202, 0.5);
-            transition: all 0.4s ease;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .user-avatar:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px rgba(255, 0, 128, 0.7);
-        }
-
-        .user-details h6 {
-            margin: 0;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--text-primary);
-        }
-
-        .user-details small {
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        .logout-btn {
-            background: var(--surface-glass);
-            color: var(--text-primary);
-            border: var(--border-glass);
-            padding: 0.8rem 1.5rem;
-            border-radius: 16px;
-            font-weight: 700;
-            transition: all 0.4s ease;
-            cursor: pointer;
+            color: white;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            backdrop-filter: blur(15px);
+            gap: 15px;
         }
 
-        .logout-btn:hover {
-            background: var(--surface-hover);
-            color: #ff0080;
-            box-shadow: 0 10px 30px rgba(255, 0, 128, 0.3);
+        .login-title i {
+            color: #00d4ff;
+            font-size: 28px;
+        }
+
+        .login-description {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .form-container {
+            position: relative;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 35px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .input-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .input-wrapper:focus-within::before {
+            left: 100%;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: #00d4ff;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
             transform: translateY(-2px);
         }
 
-        .main-content {
-            flex-grow: 1;
-            padding: 2rem;
-            min-height: calc(100% - 4rem);
+        .input-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.5);
+            z-index: 2;
+            transition: color 0.3s ease;
         }
 
-        .content-placeholder {
-            background: var(--surface-secondary);
-            backdrop-filter: blur(20px);
-            border: var(--border-glass);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            color: var(--text-secondary);
-            box-shadow: var(--shadow-dark);
+        .input-wrapper:focus-within .input-icon {
+            color: #00d4ff;
         }
 
-        .time-display {
-            font-size: 0.9rem;
-            color: var(--text-accent);
+        .form-input {
+            width: 100%;
+            padding: 20px 20px 20px 60px;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 16px;
+            font-weight: 400;
+            outline: none;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 300;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 3;
+            transition: all 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #00d4ff;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff0080, #7928ca);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(255, 0, 128, 0.3);
+            margin-top: 20px;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 0, 128, 0.4);
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-size: 14px;
             font-weight: 500;
-            text-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+            display: none;
+            position: relative;
+            overflow: hidden;
         }
 
-        @media (max-width: 1024px) {
-            .sidebar { width: 200px; }
-            .main-content { padding: 1.5rem; }
+        .alert-error {
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            color: #ff453a;
         }
 
-        @media (max-width: 768px) {
-            .main-container { flex-direction: column; }
-            .sidebar { width: 100%; height: auto; position: relative; border-right: none; border-bottom: var(--border-glass); }
-            .sidebar a { justify-content: center; }
-            .top-bar { flex-direction: column; gap: 1.5rem; text-align: center; }
-            .main-content { padding: 1rem; }
+        .alert-success {
+            background: rgba(50, 215, 75, 0.1);
+            border: 1px solid rgba(50, 215, 75, 0.3);
+            color: #30d158;
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .forgot-password a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .forgot-password a:hover {
+            color: #00d4ff;
+            background: rgba(0, 212, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .security-badge {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .security-badge i {
+            color: #32d74b;
+            font-size: 14px;
+        }
+
+        @media (max-width: 968px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                width: 95vw;
+                height: auto;
+                min-height: 90vh;
+            }
+
+            .brand-section {
+                padding: 40px 30px;
+            }
+
+            .brand-title {
+                font-size: 36px;
+            }
+
+            .login-section {
+                padding: 40px 30px;
+            }
+
+            .login-title {
+                font-size: 28px;
+            }
         }
 
         @media (max-width: 480px) {
-            .dashboard-title { font-size: 1.6rem; }
-            .user-avatar { width: 40px; height: 40px; font-size: 1rem; }
-            .sidebar a { padding: 0.5rem; font-size: 0.9rem; }
-            .content-placeholder { padding: 1rem; }
+            .brand-section, .login-section {
+                padding: 30px 20px;
+            }
+
+            .brand-title {
+                font-size: 28px;
+            }
+
+            .login-title {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="bg-animation">
-        <div class="dark-grid"></div>
-        <div class="neon-orbs">
-            <div class="orb orb1"></div>
-            <div class="orb orb2"></div>
-            <div class="orb orb3"></div>
-        </div>
+    <div class="cyber-grid"></div>
+    
+    <div class="neon-orbs">
+        <div class="orb orb1"></div>
+        <div class="orb orb2"></div>
+        <div class="orb orb3"></div>
     </div>
 
     <div class="main-container">
-        <div class="sidebar">
-            <a href="#" class="active" data-section="create-bill"><i class="fas fa-receipt"></i> Create Bill</a>
-            <a href="#" data-section="manage-customer"><i class="fas fa-users"></i> Manage Customer</a>
-            <a href="#" data-section="manage-item"><i class="fas fa-box-open"></i> Manage Item</a>
-            <a href="#" data-section="view-customers"><i class="fas fa-eye"></i> View Customers</a>
-            <a href="#" data-section="view-items"><i class="fas fa-eye"></i> View Items</a>
-        </div>
-        <div class="main-content">
-            <div class="top-bar">
-                <h1 class="dashboard-title">
-                    <i class="fas fa-cash-register"></i>
-                    Cashier Panel
-                </h1>
-                <div class="user-info">
-                    <div class="user-details text-end">
-                        <h6>Cashier User</h6>
-                        <small>Billing Operator</small>
-                        <div class="time-display" id="currentDateTime"></div>
-                    </div>
-                    <div class="user-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <button class="logout-btn" id="logoutBtn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </button>
-                </div>
+        <!-- Brand Section -->
+        <div class="brand-section">
+            <div class="brand-logo">
+                <i class="fas fa-rocket"></i>
             </div>
-            <div class="content-placeholder" id="mainContent">
-                Select an option from the sidebar to begin.
+            <h1 class="brand-title">PAHANA</h1>
+            <p class="brand-subtitle">Education Platform</p>
+            <p class="tagline">
+                Streamlining educational transactions with secure and efficient cashier services.
+            </p>
+        </div>
+
+        <!-- Login Section -->
+        <div class="login-section">
+            <div class="login-header">
+                <h2 class="login-title">
+                    <i class="fas fa-shield-alt"></i>
+                    Cashier Access
+                </h2>
+                <p class="login-description">
+                    Securely access your cashier dashboard to manage transactions.
+                </p>
+            </div>
+
+            <form id="loginForm" class="form-container">
+                <div id="alertContainer"></div>
+
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <i class="input-icon fas fa-user-shield"></i>
+                        <input type="text" class="form-input" id="cashierId" placeholder="Cashier ID" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-wrapper">
+                        <i class="input-icon fas fa-key"></i>
+                        <input type="password" class="form-input" id="password" placeholder="Secure Password" required>
+                        <i class="password-toggle fas fa-eye" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn" id="loginBtn">
+                    <span>AUTHENTICATE</span>
+                </button>
+            </form>
+
+            <div class="forgot-password">
+                <a href="help.html">
+                    <i class="fas fa-life-ring"></i> Technical Support
+                </a>
+            </div>
+
+            <div class="security-badge">
+                <i class="fas fa-lock"></i>
+                <span>SSL ENCRYPTED</span>
             </div>
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const sidebarLinks = document.querySelectorAll('.sidebar a');
-            const mainContent = document.getElementById('mainContent');
+        // Enhanced form functionality
+        const form = document.getElementById('loginForm');
+        const cashierIdInput = document.getElementById('cashierId');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const togglePassword = document.getElementById('togglePassword');
+        const alertContainer = document.getElementById('alertContainer');
 
-            // Update time display
-            function updateTime() {
-                const now = new Date();
-                const options = { 
-                    weekday: 'long', 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    timeZoneName: 'short'
-                };
-                document.getElementById('currentDateTime').textContent = now.toLocaleString('en-US', options).replace(' at ', ', ');
-            }
-            updateTime();
-            setInterval(updateTime, 60000);
+        // Password visibility toggle
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            togglePassword.classList.toggle('fa-eye');
+            togglePassword.classList.toggle('fa-eye-slash');
+        });
 
-            // Sidebar navigation
-            sidebarLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    sidebarLinks.forEach(l => l.classList.remove('active'));
-                    this.classList.add('active');
-
-                    const section = this.getAttribute('data-section');
-                    let content = '';
-                    switch(section) {
-                        case 'create-bill':
-                            content = '<h3>Create Bill</h3><p>Form to create a new bill will appear here.</p>';
-                            break;
-                        case 'manage-customer':
-                            content = '<h3>Manage Customer</h3><p>Manage customer details here.</p>';
-                            break;
-                        case 'manage-item':
-                            content = '<h3>Manage Item</h3><p>Manage item inventory here.</p>';
-                            break;
-                        case 'view-customers':
-                            content = '<h3>View Customers</h3><p>List of customers will be displayed here.</p>';
-                            break;
-                        case 'view-items':
-                            content = '<h3>View Items</h3><p>List of items will be displayed here.</p>';
-                            break;
-                    }
-                    mainContent.innerHTML = content;
-                });
-            });
-
-            // Initial load
-            sidebarLinks[0].click();
-
-            // Logout functionality
-            document.getElementById('logoutBtn').addEventListener('click', function() {
-                if (confirm('Are you sure you want to logout?')) {
-                    document.body.style.animation = 'fadeOut 0.8s ease-out forwards';
-                    setTimeout(() => {
-                        window.location.href = 'login.html';
-                    }, 800);
-                }
-            });
-
-            // Add custom CSS animation
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fadeOut {
-                    to { opacity: 0; transform: scale(0.9); filter: blur(5px); }
-                }
+        // Enhanced alert system
+        function showAlert(message, type = 'error') {
+            alertContainer.innerHTML = `
+                <div class="alert alert-${type}">
+                    <i class="fas ${type === 'error' ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+                    ${message}
+                </div>
             `;
-            document.head.appendChild(style);
+            alertContainer.firstElementChild.style.display = 'block';
+            
+            if (type === 'error') {
+                setTimeout(() => {
+                    alertContainer.innerHTML = '';
+                }, 6000);
+            }
+        }
+
+        // Advanced form validation
+        function validateInput(input, minLength, fieldName) {
+            const value = input.value.trim();
+            if (!value) {
+                showAlert(`${fieldName} is required`);
+                input.focus();
+                return false;
+            }
+            if (value.length < minLength) {
+                showAlert(`${fieldName} must be at least ${minLength} characters`);
+                input.focus();
+                return false;
+            }
+            return true;
+        }
+
+        // Form submission with enhanced error handling
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Clear previous alerts
+            alertContainer.innerHTML = '';
+
+            // Validate inputs
+            if (!validateInput(cashierIdInput, 3, 'Cashier ID')) return;
+            if (!validateInput(passwordInput, 4, 'Password')) return;
+
+            // Show loading state
+            loginBtn.classList.add('loading');
+            loginBtn.innerHTML = '';
+
+            try {
+                const response = await fetch('http://localhost:8080/Backend/resources/cashiers/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        cashierId: cashierIdInput.value.trim(),
+                        password: passwordInput.value
+                    })
+                });
+
+                if (response.ok) {
+                    const cashierData = await response.json();
+                    showAlert(`Authentication successful! Welcome, ${cashierData.name}`, 'success');
+                    
+                    // Simulate loading delay for better UX
+                    setTimeout(() => {
+                        window.location.href = 'Cashier Dashboard.html';
+                    }, 2000);
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    const errorMessage = errorData.message || response.status === 401 
+                        ? 'Invalid credentials. Please check your cashier ID and password.' 
+                        : 'Authentication failed. Please try again.';
+                    showAlert(errorMessage);
+                }
+            } catch (error) {
+                console.error('Authentication error:', error);
+                showAlert('Network error. Please check your connection and try again.');
+            } finally {
+                // Reset button state
+                setTimeout(() => {
+                    loginBtn.classList.remove('loading');
+                    loginBtn.innerHTML = '<span>AUTHENTICATE</span>';
+                }, 1500);
+            }
+        });
+
+        // Real-time input validation visual feedback
+        [cashierIdInput, passwordInput].forEach(input => {
+            input.addEventListener('input', function() {
+                const wrapper = this.closest('.input-wrapper');
+                if (this.value.length > 0) {
+                    wrapper.style.borderColor = this.value.length >= (this.id === 'cashierId' ? 3 : 4) 
+                        ? 'rgba(50, 215, 75, 0.5)' 
+                        : 'rgba(255, 59, 48, 0.5)';
+                } else {
+                    wrapper.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                }
+            });
+
+            input.addEventListener('blur', function() {
+                const wrapper = this.closest('.input-wrapper');
+                wrapper.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+                form.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Add subtle animations on load
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
         });
     </script>
 </body>

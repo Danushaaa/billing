@@ -3,905 +3,1914 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cashier Dashboard - Pahana Edu Billing</title>
+    <title>Cashier Dashboard - Pahana Edu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-            --warning-gradient: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-            --dark-bg: #1a1d29;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --glass-bg: rgba(255, 255, 255, 0.1);
-            --text-primary: #2d3748;
-            --text-secondary: #718096;
-            --shadow-light: 0 10px 40px rgba(0, 0, 0, 0.1);
-            --shadow-hover: 0 20px 60px rgba(0, 0, 0, 0.15);
+            --primary-color: #1e40af;
+            --primary-dark: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary-color: #f8fafc;
+            --accent-color: #059669;
+            --warning-color: #d97706;
+            --danger-color: #dc2626;
+            --text-dark: #0f172a;
+            --text-medium: #334155;
+            --text-light: #64748b;
+            --border-color: #e2e8f0;
+            --border-light: #f1f5f9;
+            --surface-white: #ffffff;
+            --surface-light: #f8fafc;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-surface: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            --border-radius-sm: 6px;
+            --border-radius-md: 12px;
+            --border-radius-lg: 16px;
+            --border-radius-xl: 20px;
         }
 
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--gradient-primary);
             min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Animated background elements */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            overflow: hidden;
-        }
-
-        .floating-shape {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            animation: float 6s ease-in-out infinite;
-        }
-
-        .shape-1 {
-            width: 100px;
-            height: 100px;
-            top: 20%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .shape-2 {
-            width: 60px;
-            height: 60px;
-            top: 60%;
-            right: 15%;
-            animation-delay: 2s;
-        }
-
-        .shape-3 {
-            width: 80px;
-            height: 80px;
-            bottom: 20%;
-            left: 60%;
-            animation-delay: 4s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+            padding: 1.5rem 0;
+            color: var(--text-dark);
+            font-weight: 400;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         .main-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            padding: 3rem;
-            box-shadow: var(--shadow-light);
-            position: relative;
-            animation: slideUp 0.8s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .top-bar {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
+            gap: 2rem;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--gradient-surface);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-xl);
+            padding: 2.5rem;
+            position: sticky;
+            top: 1.5rem;
+            height: fit-content;
+            border: 1px solid var(--border-light);
+        }
+
+        .sidebar-header {
+            text-align: center;
+            margin-bottom: 2rem;
             padding-bottom: 2rem;
-            border-bottom: 2px solid rgba(103, 126, 234, 0.1);
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .dashboard-title {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            color: var(--text-primary);
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin: 0;
-        }
-
-        .dashboard-title i {
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-size: 2.5rem;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--primary-gradient);
+        .sidebar-logo {
+            width: 64px;
+            height: 64px;
+            background: var(--primary-color);
+            border-radius: var(--border-radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
+            margin: 0 auto 1rem;
             color: white;
-            font-weight: 600;
-            font-size: 1.2rem;
+            font-size: 1.5rem;
         }
 
-        .user-details h6 {
+        .sidebar-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-dark);
             margin: 0;
-            color: var(--text-primary);
-            font-weight: 600;
         }
 
-        .user-details small {
-            color: var(--text-secondary);
+        .sidebar-subtitle {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin: 0.25rem 0 0;
         }
 
-        .logout-btn {
-            background: var(--secondary-gradient);
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 12px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            cursor: pointer;
+        .tabs {
             display: flex;
-            align-items: center;
+            flex-direction: column;
             gap: 0.5rem;
         }
 
-        .logout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(245, 87, 108, 0.3);
-        }
-
-        .stats-overview {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-
-        .stat-card {
-            background: var(--card-bg);
-            border-radius: 16px;
-            padding: 1.5rem;
-            text-align: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.6s ease-out;
-            animation-fill-mode: both;
-        }
-
-        .stat-card:nth-child(1) { animation-delay: 0.1s; }
-        .stat-card:nth-child(2) { animation-delay: 0.2s; }
-        .stat-card:nth-child(3) { animation-delay: 0.3s; }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-
-        .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            margin: 0 auto 1rem;
+        .tab-button {
+            background: transparent;
+            color: var(--text-medium);
+            border: 2px solid transparent;
+            padding: 1rem 1.25rem;
+            border-radius: var(--border-radius-md);
+            font-weight: 500;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-        }
-
-        .stat-card:nth-child(1) .stat-icon { background: var(--primary-gradient); }
-        .stat-card:nth-child(2) .stat-icon { background: var(--success-gradient); }
-        .stat-card:nth-child(3) .stat-icon { background: var(--warning-gradient); }
-
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-        }
-
-        .action-card {
-            background: var(--card-bg);
-            border-radius: 20px;
-            padding: 2.5rem;
-            text-align: center;
-            text-decoration: none;
-            color: var(--text-primary);
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            gap: 0.75rem;
             position: relative;
             overflow: hidden;
-            animation: slideInUp 0.6s ease-out;
-            animation-fill-mode: both;
         }
 
-        .action-card:nth-child(1) { animation-delay: 0.2s; }
-        .action-card:nth-child(2) { animation-delay: 0.4s; }
-        .action-card:nth-child(3) { animation-delay: 0.6s; }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .action-card::before {
+        .tab-button::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+            transition: left 0.5s;
         }
 
-        .action-card:hover::before {
+        .tab-button:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateX(4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .tab-button:hover::before {
             left: 100%;
         }
 
-        .action-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: var(--shadow-hover);
-            text-decoration: none;
-            color: var(--text-primary);
-        }
-
-        .action-icon {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin: 0 auto 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
+        .tab-button.active {
+            background: var(--primary-color);
             color: white;
-            transition: all 0.3s ease;
+            border-color: var(--primary-dark);
+            box-shadow: var(--shadow-md);
         }
 
-        .customers-card .action-icon {
-            background: var(--primary-gradient);
-        }
-
-        .items-card .action-icon {
-            background: var(--success-gradient);
-        }
-
-        .billing-card .action-icon {
-            background: var(--warning-gradient);
-        }
-
-        .action-card:hover .action-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .action-title {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-
-        .action-desc {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-        }
-
-        .action-features {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .feature-badge {
-            background: rgba(103, 126, 234, 0.1);
-            color: #667eea;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-        }
-
-        .welcome-banner {
-            background: var(--primary-gradient);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 16px;
+        .tab-button i {
+            width: 20px;
             text-align: center;
-            margin-bottom: 2rem;
-            position: relative;
-            overflow: hidden;
         }
 
-        .welcome-banner::before {
+        .content-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card {
+            background: var(--gradient-surface);
+            border-radius: var(--border-radius-xl);
+            box-shadow: var(--shadow-xl);
+            border: 1px solid var(--border-light);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .card::before {
             content: '';
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-
-        .welcome-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .quick-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .quick-btn {
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 0.6rem 1.2rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .quick-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            color: white;
-            text-decoration: none;
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 768px) {
-            .main-container {
-                margin: 1rem;
-                padding: 2rem 1.5rem;
-            }
-            
-            .dashboard-title {
-                font-size: 1.8rem;
-            }
-            
-            .top-bar {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-                gap: 1.5rem;
-            }
-            
-            .action-card {
-                padding: 2rem 1.5rem;
-            }
-        }
-
-        /* Loading animation for page */
-        .page-loader {
-            position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--primary-gradient);
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .card-header {
+            background: transparent;
+            border: none;
+            padding: 3rem 3rem 1.5rem;
+            text-align: center;
+        }
+
+        .card-title {
+            color: var(--text-dark);
+            font-size: 2.25rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
-            animation: fadeOut 0.5s ease-out 1.5s forwards;
+            gap: 1rem;
+            letter-spacing: -0.025em;
         }
 
-        .loader-icon {
+        .card-title i {
+            color: var(--primary-color);
+            font-size: 2rem;
+        }
+
+        .card-subtitle {
+            color: var(--text-light);
+            font-size: 1.125rem;
+            font-weight: 400;
+            margin: 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .card-body {
+            padding: 1.5rem 3rem 3rem;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            color: var(--text-dark);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .section-title i {
+            color: var(--primary-color);
+            font-size: 1.125rem;
+        }
+
+        .form-group {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            display: block;
+        }
+
+        .form-control, select {
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            padding: 1rem 1.25rem;
+            font-size: 1rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--surface-white);
+            color: var(--text-dark);
+            width: 100%;
+            font-weight: 500;
+        }
+
+        .form-control:focus, select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(30, 64, 175, 0.1);
+            background: var(--surface-white);
+            outline: none;
+        }
+
+        .form-control:hover, select:hover {
+            border-color: var(--primary-light);
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+            z-index: 5;
+            pointer-events: none;
+            font-size: 1.125rem;
+        }
+
+        .form-control.with-icon, select.with-icon {
+            padding-right: 3.5rem;
+        }
+
+        .form-help {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.5rem;
+            font-weight: 400;
+        }
+
+        .btn {
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--border-radius-md);
+            padding: 0.875rem 1.75rem;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
             color: white;
-            font-size: 3rem;
-            animation: spin 1s linear infinite;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:disabled {
+            background: var(--text-light);
+            border-color: var(--text-light);
+            color: white;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-secondary {
+            background: var(--text-medium);
+            border-color: var(--text-medium);
+            color: white;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-dark);
+            border-color: var(--text-dark);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-outline-danger {
+            border-color: var(--danger-color);
+            color: var(--danger-color);
+            background: transparent;
+        }
+
+        .btn-outline-danger:hover {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-outline-primary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-lg {
+            padding: 1rem 2rem;
+            font-size: 1.125rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .table-container {
+            background: var(--surface-white);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .table {
+            margin: 0;
+            border: none;
+        }
+
+        .table th {
+            background: var(--primary-color);
+            color: white;
+            font-weight: 600;
+            font-size: 0.95rem;
+            padding: 1.25rem 1.5rem;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+        }
+
+        .table td {
+            padding: 1.25rem 1.5rem;
+            border: none;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--text-dark);
+            font-weight: 500;
+            vertical-align: middle;
+        }
+
+        .table tbody tr:hover {
+            background: var(--surface-light);
+        }
+
+        .table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: var(--border-radius-md);
+            background: var(--border-light);
+            overflow: hidden;
+            margin-bottom: 2rem;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-bar {
+            background: var(--gradient-primary);
+            border-radius: var(--border-radius-md);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .alert {
+            border: none;
+            border-radius: var(--border-radius-md);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+            display: none;
+            font-weight: 500;
+            box-shadow: var(--shadow-sm);
+            align-items: center;
+        }
+
+        .alert-success {
+            background: #dcfce7;
+            color: #166534;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .alert-danger {
+            background: #fef2f2;
+            color: #991b1b;
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
         }
 
         @keyframes spin {
-            from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                visibility: hidden;
+        .order-item {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--surface-light);
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .order-item .form-group {
+            margin-bottom: 0;
+            flex: 1;
+        }
+
+        .bill-receipt {
+            background: var(--surface-white);
+            padding: 2.5rem;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-lg);
+            margin-top: 2rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .receipt-title {
+            color: var(--text-dark);
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .receipt-subtitle {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .total-section {
+            text-align: right;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .total-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-content {
+            border: none;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .modal-header {
+            background: var(--surface-light);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+            padding: 1.5rem 2rem;
+        }
+
+        .modal-title {
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-footer {
+            background: var(--surface-light);
+            border-top: 1px solid var(--border-color);
+            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+            padding: 1.5rem 2rem;
+        }
+
+        .form-control.is-valid, select.is-valid {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.1);
+        }
+
+        .form-control.is-invalid, select.is-invalid {
+            border-color: var(--danger-color);
+            box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                max-width: 1140px;
+                gap: 1.5rem;
+            }
+            .sidebar {
+                width: 260px;
             }
         }
 
-        /* Enhanced hover effects */
-        .action-card:hover .action-title {
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        @media (max-width: 992px) {
+            .main-container {
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+            }
+            .sidebar {
+                width: 100%;
+                position: static;
+                padding: 2rem;
+            }
+            .card-title {
+                font-size: 1.875rem;
+            }
+            .card-header {
+                padding: 2rem 2rem 1rem;
+            }
+            .card-body {
+                padding: 1rem 2rem 2rem;
+            }
         }
 
-        /* Notification badge */
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff4757;
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            font-weight: 600;
-            animation: bounce 2s infinite;
+        @media (max-width: 768px) {
+            .order-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .card-title {
+                font-size: 1.5rem;
+            }
+            .sidebar-header {
+                margin-bottom: 1.5rem;
+                padding-bottom: 1.5rem;
+            }
+            .section-title {
+                font-size: 1.125rem;
+            }
         }
 
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-10px); }
-            60% { transform: translateY(-5px); }
-        }
-
-        /* Loading state for stats */
-        .stat-loading {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            display: none;
-        }
-
-        .stat-number.loading {
-            opacity: 0.5;
+        @media print {
+            body {
+                font-family: 'Times New Roman', serif;
+                font-size: 12px;
+                background: white;
+            }
+            .bill-receipt {
+                box-shadow: none;
+                border: 2px solid #000;
+            }
+            .receipt-header, .total-section {
+                text-align: center;
+            }
+            .btn, .sidebar, .modal {
+                display: none !important;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Page Loader -->
-    <div class="page-loader">
-        <i class="fas fa-cog loader-icon"></i>
-    </div>
-
-    <!-- Animated Background -->
-    <div class="bg-animation">
-        <div class="floating-shape shape-1"></div>
-        <div class="floating-shape shape-2"></div>
-        <div class="floating-shape shape-3"></div>
-    </div>
-
-    <div class="container">
-        <div class="main-container">
-            <!-- Welcome Banner -->
-            <div class="welcome-banner">
-                <div class="welcome-content">
-                    <h3><i class="fas fa-star"></i> Welcome to Pahana Edu Billing</h3>
-                    <p class="mb-0">Manage your cashier tasks with ease and efficiency</p>
-                    <div class="quick-actions">
-                        <a href="#" class="quick-btn"><i class="fas fa-chart-line"></i> Analytics</a>
-                        <a href="#" class="quick-btn"><i class="fas fa-cog"></i> Settings</a>
-                        <a href="#" class="quick-btn"><i class="fas fa-bell"></i> Notifications</a>
-                    </div>
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-cash-register"></i>
                 </div>
+                <h2 class="sidebar-title">Pahana Edu</h2>
+                <p class="sidebar-subtitle">Billing System</p>
             </div>
-
-            <!-- Top Bar -->
-            <div class="top-bar">
-                <h1 class="dashboard-title">
-                    <i class="fas fa-user-tie"></i>
-                    Cashier Dashboard
-                </h1>
-                <div class="user-info">
-                    <div class="user-details text-end">
-                        <h6>Cashier User</h6>
-                        <small>Cashier</small>
-                    </div>
-                    <div class="user-avatar">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <button class="logout-btn">
-                        <i class="fas fa-sign-out-alt"></i>
-                        Logout
-                    </button>
-                </div>
+            <div class="tabs">
+                <button class="tab-button active" onclick="showTab('add-customer')">
+                    <i class="fas fa-user-plus"></i>Add Customer
+                </button>
+                <button class="tab-button" onclick="showTab('view-customers')">
+                    <i class="fas fa-users"></i>View Customers
+                </button>
+                <button class="tab-button" onclick="showTab('add-item')">
+                    <i class="fas fa-box"></i>Add Item
+                </button>
+                <button class="tab-button" onclick="showTab('view-items')">
+                    <i class="fas fa-boxes"></i>View Items
+                </button>
+                <button class="tab-button" onclick="showTab('place-order')">
+                    <i class="fas fa-shopping-cart"></i>Place Order
+                </button>
+                <button class="tab-button" onclick="showTab('view-orders')">
+                    <i class="fas fa-list"></i>View Orders
+                </button>
             </div>
-
-            <!-- Stats Overview -->
-            <div class="stats-overview">
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="stat-number" id="totalCustomersHandled">0</div>
-                    <div class="stat-label">Customers Handled</div>
-                    <div class="stat-loading">Loading...</div>
+        </div>
+        <div class="content-area">
+            <div class="card">
+                <div class="card-header">
+                    <h1 class="card-title">
+                        <i class="fas fa-cash-register"></i>
+                        Cashier Dashboard
+                    </h1>
+                    <p class="card-subtitle">Streamline your customer management, inventory control, and order processing with our comprehensive billing system</p>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-exchange-alt"></i>
+                <div class="card-body">
+                    <!-- Add Customer -->
+                    <div id="add-customer" class="tab-content active">
+                        <div class="progress">
+                            <div class="progress-bar" id="add-customer-progress" style="width: 0%"></div>
+                        </div>
+                        <div class="alert alert-success" id="add-customer-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span id="add-customer-success-message"></span>
+                        </div>
+                        <div class="alert alert-danger" id="add-customer-error">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="add-customer-error-message"></span>
+                        </div>
+                        <form id="add-customer-form">
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <i class="fas fa-id-card"></i>
+                                    Account Information
+                                </h3>
+                                <div class="form-group">
+                                    <label for="customer-account-number" class="form-label">Account Number *</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control with-icon" id="customer-account-number" required aria-describedby="accountNumberHelp">
+                                        <i class="fas fa-hashtag input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="accountNumberHelp">Unique identifier for the customer account</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customer-password" class="form-label">Password *</label>
+                                    <div class="input-group">
+                                        <input type="password" class="form-control with-icon" id="customer-password" pattern=".{8,}" required title="Password must be at least 8 characters" aria-describedby="passwordHelp">
+                                        <i class="fas fa-lock input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="passwordHelp">Minimum 8 characters required for security</div>
+                                </div>
+                            </div>
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <i class="fas fa-user"></i>
+                                    Personal Details
+                                </h3>
+                                <div class="form-group">
+                                    <label for="customer-name" class="form-label">Full Name *</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control with-icon" id="customer-name" required aria-describedby="nameHelp">
+                                        <i class="fas fa-user input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="nameHelp">Enter the customer's complete legal name</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customer-email" class="form-label">Email Address *</label>
+                                    <div class="input-group">
+                                        <input type="email" class="form-control with-icon" id="customer-email" required aria-describedby="emailHelp">
+                                        <i class="fas fa-envelope input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="emailHelp">Valid email address for communication and billing</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customer-contact" class="form-label">Phone Number *</label>
+                                    <div class="input-group">
+                                        <input type="tel" class="form-control with-icon" id="customer-contact" pattern="\+94\d{9}" required title="Enter a valid Sri Lankan number (e.g., +94123456789)" placeholder="+94123456789" aria-describedby="contactHelp">
+                                        <i class="fas fa-phone input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="contactHelp">Sri Lankan format: +94xxxxxxxxx</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customer-nic" class="form-label">National ID (NIC) *</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control with-icon" id="customer-nic" pattern="[0-9]{9}[vV]|[0-9]{12}" required title="Enter a valid NIC (e.g., 123456789V or 123456789012)" placeholder="123456789V or 123456789012" aria-describedby="NICHelp">
+                                        <i class="fas fa-id-card-alt input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="NICHelp">Old format: 9 digits + V/v, New format: 12 digits</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customer-address" class="form-label">Address *</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control with-icon" id="customer-address" required aria-describedby="addressHelp">
+                                        <i class="fas fa-map-marker-alt input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="addressHelp">Complete residential or business address with postal code</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customer-units-consumed" class="form-label">Units Consumed *</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control with-icon" id="customer-units-consumed" min="0" required placeholder="0" aria-describedby="unitsConsumedHelp">
+                                        <i class="fas fa-bolt input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="unitsConsumedHelp">Current electricity units consumed for billing</div>
+                                </div>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg position-relative" aria-label="Add new customer">
+                                    <span class="btn-text">
+                                        <i class="fas fa-user-plus"></i>
+                                        Add Customer
+                                    </span>
+                                    <div class="loading">
+                                        <div class="spinner"></div>
+                                    </div>
+                                </button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="stat-number" id="totalTransactions">0</div>
-                    <div class="stat-label">Total Transactions</div>
-                    <div class="stat-loading">Loading...</div>
+
+                    <!-- View Customers -->
+                    <div id="view-customers" class="tab-content">
+                        <h3 class="section-title">
+                            <i class="fas fa-users"></i>
+                            Customer Directory
+                        </h3>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Account Number</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Contact</th>
+                                        <th>Address</th>
+                                        <th>NIC</th>
+                                        <th>Units Consumed</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="customers-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Add Item -->
+                    <div id="add-item" class="tab-content">
+                        <div class="progress">
+                            <div class="progress-bar" id="add-item-progress" style="width: 0%"></div>
+                        </div>
+                        <div class="alert alert-success" id="add-item-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span id="add-item-success-message"></span>
+                        </div>
+                        <div class="alert alert-danger" id="add-item-error">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="add-item-error-message"></span>
+                        </div>
+                        <form id="add-item-form">
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <i class="fas fa-box"></i>
+                                    Product Information
+                                </h3>
+                                <div class="form-group">
+                                    <label for="item-code" class="form-label">Item Code *</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control with-icon" id="item-code" required aria-describedby="itemCodeHelp">
+                                        <i class="fas fa-hashtag input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="itemCodeHelp">Unique product identifier for inventory tracking</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="item-name" class="form-label">Item Name *</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control with-icon" id="item-name" required aria-describedby="itemNameHelp">
+                                        <i class="fas fa-box-open input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="itemNameHelp">Descriptive name of the product</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="item-unit-price" class="form-label">Unit Price *</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control with-icon" id="item-unit-price" min="0" step="0.01" required aria-describedby="unitPriceHelp">
+                                        <i class="fas fa-dollar-sign input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="unitPriceHelp">Price per unit in local currency</div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="item-quantity" class="form-label">Quantity in Stock *</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control with-icon" id="item-quantity" min="0" required aria-describedby="quantityHelp">
+                                        <i class="fas fa-cubes input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="quantityHelp">Current available inventory quantity</div>
+                                </div>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg position-relative" aria-label="Add new item">
+                                    <span class="btn-text">
+                                        <i class="fas fa-box"></i>
+                                        Add Item
+                                    </span>
+                                    <div class="loading">
+                                        <div class="spinner"></div>
+                                    </div>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- View Items -->
+                    <div id="view-items" class="tab-content">
+                        <h3 class="section-title">
+                            <i class="fas fa-boxes"></i>
+                            Inventory Management
+                        </h3>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Item Code</th>
+                                        <th>Name</th>
+                                        <th>Unit Price</th>
+                                        <th>Quantity in Stock</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="items-table"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Place Order -->
+                    <div id="place-order" class="tab-content">
+                        <div class="progress">
+                            <div class="progress-bar" id="place-order-progress" style="width: 0%"></div>
+                        </div>
+                        <div class="alert alert-success" id="place-order-success">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <span id="place-order-success-message"></span>
+                        </div>
+                        <div class="alert alert-danger" id="place-order-error">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <span id="place-order-error-message"></span>
+                        </div>
+                        <form id="place-order-form">
+                            <div class="form-section">
+                                <h3 class="section-title">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Order Configuration
+                                </h3>
+                                <div class="form-group">
+                                    <label for="order-customer" class="form-label">Select Customer *</label>
+                                    <div class="input-group">
+                                        <select class="form-control with-icon" id="order-customer" required aria-describedby="customerHelp">
+                                            <option value="">Choose a customer from the list</option>
+                                        </select>
+                                        <i class="fas fa-user input-icon"></i>
+                                    </div>
+                                    <div class="form-help" id="customerHelp">Select the customer placing this order</div>
+                                </div>
+                                <div id="order-items-container">
+                                    <div class="order-item">
+                                        <div class="form-group">
+                                            <label class="form-label">Product Selection *</label>
+                                            <div class="input-group">
+                                                <select class="form-control with-icon order-item-code" required aria-describedby="itemSelectHelp">
+                                                    <option value="">Select a product</option>
+                                                </select>
+                                                <i class="fas fa-box-open input-icon"></i>
+                                            </div>
+                                            <div class="form-help" id="itemSelectHelp">Choose a product for this order line</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label">Quantity *</label>
+                                            <div class="input-group">
+                                                <input type="number" class="form-control with-icon order-item-quantity" min="1" required aria-describedby="itemQuantityHelp">
+                                                <i class="fas fa-cubes input-icon"></i>
+                                            </div>
+                                            <div class="form-help" id="itemQuantityHelp">Number of units to order</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeOrderItem(this)">
+                                                <i class="fas fa-trash"></i> Remove
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-secondary mb-3" onclick="addOrderItem()">
+                                    <i class="fas fa-plus"></i>Add Another Product
+                                </button>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg position-relative" aria-label="Place order">
+                                    <span class="btn-text">
+                                        <i class="fas fa-shopping-cart"></i>
+                                        Process Order
+                                    </span>
+                                    <div class="loading">
+                                        <div class="spinner"></div>
+                                    </div>
+                                </button>
+                            </div>
+                        </form>
+                        <div id="order-receipt" class="bill-receipt" style="display: none;"></div>
+                    </div>
+
+                    <!-- View Orders -->
+                    <div id="view-orders" class="tab-content">
+                        <h3 class="section-title">
+                            <i class="fas fa-list"></i>
+                            Order History
+                        </h3>
+                        <div class="table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer Account</th>
+                                        <th>Customer Name</th>
+                                        <th>Items</th>
+                                        <th>Total Amount</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orders-table"></tbody>
+                            </table>
+                        </div>
+                        <div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="receiptModalLabel">
+                                            <i class="fas fa-receipt me-2"></i>Order Receipt
+                                        </h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div id="modal-receipt" class="bill-receipt"></div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            <i class="fas fa-times me-2"></i>Close
+                                        </button>
+                                        <button type="button" class="btn btn-primary" onclick="printModalReceipt()">
+                                            <i class="fas fa-print me-2"></i>Print Receipt
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-icon">
-                        <i class="fas fa-file-invoice-dollar"></i>
-                    </div>
-                    <div class="stat-number" id="dailyRevenue">Rs 0</div>
-                    <div class="stat-label">Daily Revenue</div>
-                    <div class="stat-loading">Loading...</div>
-                </div>
-            </div>
-
-            <!-- Dashboard Grid -->
-            <div class="dashboard-grid">
-                <!-- Manage Customers -->
-                <a href="manage-customers.html" class="action-card customers-card">
-                    <div class="action-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <div class="action-title">Manage Customers</div>
-                    <div class="action-desc">
-                        Add, view, edit, and organize your customer database with advanced search and filtering options
-                    </div>
-                    <div class="action-features">
-                        <span class="feature-badge">Add</span>
-                        <span class="feature-badge">Edit</span>
-                        <span class="feature-badge">Search</span>
-                    </div>
-                    <div class="notification-badge">3</div>
-                </a>
-
-                <!-- Manage Items -->
-                <a href="manage-items.html" class="action-card items-card">
-                    <div class="action-icon">
-                        <i class="fas fa-box-open"></i>
-                    </div>
-                    <div class="action-title">Manage Items</div>
-                    <div class="action-desc">
-                        Control your inventory with smart categorization, pricing management, and stock tracking
-                    </div>
-                    <div class="action-features">
-                        <span class="feature-badge">Inventory</span>
-                        <span class="feature-badge">Pricing</span>
-                        <span class="feature-badge">Categories</span>
-                    </div>
-                    <div class="notification-badge">2</div>
-                </a>
-
-                <!-- Smart Billing -->
-                <a href="billing.html" class="action-card billing-card">
-                    <div class="action-icon">
-                        <i class="fas fa-receipt"></i>
-                    </div>
-                    <div class="action-title">Smart Billing</div>
-                    <div class="action-desc">
-                        Create professional invoices, track payments, and generate comprehensive financial reports
-                    </div>
-                    <div class="action-features">
-                        <span class="feature-badge">Invoices</span>
-                        <span class="feature-badge">Reports</span>
-                        <span class="feature-badge">Payments</span>
-                    </div>
-                    <div class="notification-badge">2</div>
-                </a>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Remove page loader
-            setTimeout(() => {
-                const loader = document.querySelector('.page-loader');
-                if (loader) {
-                    loader.style.display = 'none';
-                }
-            }, 1500);
+        const API_BASE_URL = 'http://localhost:8080/Backend/resources/';
 
-            // Initialize stats loading state
-            const statCards = document.querySelectorAll('.stat-card');
-            statCards.forEach(card => {
-                const statNumber = card.querySelector('.stat-number');
-                const statLoading = card.querySelector('.stat-loading');
-                statNumber.classList.add('loading');
-                statLoading.style.display = 'block';
-            });
+        function sanitizeInput(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
 
-            // Fetch stats from backend (adjusted for cashier context)
-            fetchStats();
-
-            async function fetchStats() {
-                try {
-                    const response = await fetch('http://localhost:8080/Backend/resources/cashier-stats', {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/json'
-                        }
-                    });
-
-                    if (response.ok) {
-                        const stats = await response.json();
-                        // Sanitize and validate data
-                        const totalCustomersHandled = Number.isFinite(parseInt(stats.totalCustomersHandled)) ? parseInt(stats.totalCustomersHandled) : 0;
-                        const totalTransactions = Number.isFinite(parseInt(stats.totalTransactions)) ? parseInt(stats.totalTransactions) : 0;
-                        const dailyRevenue = Number.isFinite(parseFloat(stats.dailyRevenue)) ? parseFloat(stats.dailyRevenue) : 0;
-
-                        // Update DOM with sanitized values
-                        document.getElementById('totalCustomersHandled').textContent = totalCustomersHandled.toLocaleString();
-                        document.getElementById('totalTransactions').textContent = totalTransactions.toLocaleString();
-                        document.getElementById('dailyRevenue').textContent = 'Rs ' + dailyRevenue.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-                        // Remove loading state
-                        statCards.forEach(card => {
-                            const statNumber = card.querySelector('.stat-number');
-                            const statLoading = card.querySelector('.stat-loading');
-                            statNumber.classList.remove('loading');
-                            statLoading.style.display = 'none';
-                        });
-
-                        // Animate numbers
-                        statCards.forEach(card => {
-                            const statNumber = card.querySelector('.stat-number');
-                            if (!statNumber.dataset.animated) {
-                                animateNumber(statNumber);
-                                statNumber.dataset.animated = 'true';
-                            }
-                        });
-                    } else {
-                        let errorMessage = response.statusText;
-                        const contentType = response.headers.get('content-type');
-                        if (contentType && contentType.includes('application/json')) {
-                            const errorData = await response.json();
-                            errorMessage = errorData.message || errorMessage;
-                        } else {
-                            errorMessage = await response.text() || errorMessage;
-                        }
-                        console.error('Failed to fetch stats:', response.status, errorMessage);
-                        showError(`Failed to load stats: ${errorMessage}`);
-                    }
-                } catch (error) {
-                    console.error('Error fetching stats:', error);
-                    showError(`Network error: ${error.message}`);
-                }
-            }
-
-            // Show error message (using Bootstrap toast)
-            function showError(message) {
-                const toast = document.createElement('div');
-                toast.className = 'toast align-items-center text-white bg-danger border-0';
-                toast.setAttribute('role', 'alert');
-                toast.setAttribute('aria-live', 'assertive');
-                toast.setAttribute('aria-atomic', 'true');
-                toast.style.position = 'fixed';
-                toast.style.top = '20px';
-                toast.style.right = '20px';
-                toast.style.zIndex = '9999';
-                toast.innerHTML = `
-                    <div class="d-flex">
-                        <div class="toast-body">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            ${sanitizeHTML(message)}
-                        </div>
-                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                `;
-                document.body.appendChild(toast);
-                const bsToast = new bootstrap.Toast(toast);
-                bsToast.show();
-                setTimeout(() => {
-                    bsToast.hide();
-                    toast.remove();
-                }, 5000);
-            }
-
-            // Sanitize HTML to prevent XSS
-            function sanitizeHTML(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
-
-            // Add click effects
-            const actionCards = document.querySelectorAll('.action-card');
-            actionCards.forEach(card => {
-                card.addEventListener('click', function(e) {
-                    // Create ripple effect
-                    const ripple = document.createElement('div');
-                    const rect = card.getBoundingClientRect();
-                    const size = Math.max(rect.width, rect.height);
-                    const x = e.clientX - rect.left - size / 2;
-                    const y = e.clientY - rect.top - size / 2;
-                    
-                    ripple.style.cssText = `
-                        position: absolute;
-                        width: ${size}px;
-                        height: ${size}px;
-                        left: ${x}px;
-                        top: ${y}px;
-                        background: radial-gradient(circle, rgba(103, 126, 234, 0.3) 0%, transparent 70%);
-                        border-radius: 50%;
-                        transform: scale(0);
-                        animation: ripple 0.6s ease-out;
-                        pointer-events: none;
-                        z-index: 1;
-                    `;
-                    
-                    card.appendChild(ripple);
-                    
-                    setTimeout(() => {
-                        ripple.remove();
-                    }, 600);
-                });
-            });
-
-            // Logout button functionality
-            document.querySelector('.logout-btn').addEventListener('click', function() {
-                if (confirm('Are you sure you want to logout?')) {
-                    // Add logout animation
-                    document.body.style.animation = 'fadeOut 0.5s ease-out forwards';
-                    setTimeout(() => {
-                        // Redirect to login page
-                        window.location.href = 'login.html';
-                    }, 500);
-                }
-            });
-
-            // Add dynamic time greeting
-            const now = new Date();
-            const hour = now.getHours();
-            let greeting = 'Good Morning';
-            if (hour >= 12 && hour < 17) greeting = 'Good Afternoon';
-            else if (hour >= 17) greeting = 'Good Evening';
+        function showAlert(section, type, message) {
+            const alert = document.getElementById(`${section}-${type}`);
+            const messageElement = document.getElementById(`${section}-${type}-message`);
+            messageElement.innerHTML = sanitizeInput(message);
+            alert.style.display = 'flex';
+            alert.style.alignItems = 'center';
+            const otherAlert = document.getElementById(`${section}-${type === 'success' ? 'error' : 'success'}`);
+            otherAlert.style.display = 'none';
             
-            const welcomeText = document.querySelector('.welcome-banner h3');
-            if (welcomeText) {
-                welcomeText.innerHTML = `<i class="fas fa-star"></i> ${greeting}! Welcome to Pahana Edu Billing`;
-            }
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                alert.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    alert.style.display = 'none';
+                    alert.style.opacity = '1';
+                    alert.style.transform = 'translateY(0)';
+                }, 300);
+            }, 6000);
+            
+            alert.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
 
-            // Add subtle animations to stats
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
+        function updateProgress(formId, progressId) {
+            const form = document.getElementById(formId);
+            const inputs = form.querySelectorAll('input[required], select[required]');
+            let filledInputs = 0;
+            let totalWeight = 0;
+            
+            inputs.forEach(input => {
+                totalWeight++;
+                if (input.value.trim() !== '' && input.checkValidity()) {
+                    filledInputs++;
+                }
+            });
+            
+            const progress = totalWeight > 0 ? (filledInputs / totalWeight) * 100 : 0;
+            const progressBar = document.getElementById(progressId);
+            progressBar.style.width = `${progress}%`;
+            
+            if (progress === 100) {
+                progressBar.style.background = 'linear-gradient(135deg, #059669 0%, #10b981 100%)';
+            } else {
+                progressBar.style.background = 'var(--gradient-primary)';
+            }
+        }
+
+        function resetButton(button) {
+            const btnText = button.querySelector('.btn-text');
+            const loading = button.querySelector('.loading');
+            btnText.style.opacity = '1';
+            loading.style.display = 'none';
+            button.disabled = false;
+            button.style.transform = '';
+        }
+
+        function setButtonLoading(button) {
+            const btnText = button.querySelector('.btn-text');
+            const loading = button.querySelector('.loading');
+            btnText.style.opacity = '0';
+            loading.style.display = 'block';
+            button.disabled = true;
+        }
+
+        function displayReceipt(order, containerId) {
+            const currentDate = new Date();
+            const receiptHTML = `
+                <div class="receipt-header">
+                    <h3 class="receipt-title">Pahana Edu Billing System</h3>
+                    <p class="receipt-subtitle">Professional Billing Solutions</p>
+                    <hr>
+                    <p class="receipt-subtitle"><strong>Receipt #:</strong> ${order.orderId || 'ORD-' + Date.now()}</p>
+                    <p class="receipt-subtitle"><strong>Customer:</strong> ${sanitizeInput(order.customerName)}</p>
+                    <p class="receipt-subtitle"><strong>Account:</strong> ${sanitizeInput(order.customerAccountNumber)}</p>
+                    <p class="receipt-subtitle"><strong>Date:</strong> ${currentDate.toLocaleDateString('en-US', { 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                    })}</p>
+                    <p class="receipt-subtitle"><strong>Time:</strong> ${currentDate.toLocaleTimeString('en-US', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    })}</p>
+                </div>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Qty</th>
+                                <th>Unit Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${order.orderItems.map(item => `
+                                <tr>
+                                    <td><strong>${sanitizeInput(item.itemName)}</strong><br>
+                                        <small class="text-muted">Code: ${sanitizeInput(item.itemCode)}</small>
+                                    </td>
+                                    <td>${item.quantity}</td>
+                                    <td>$${item.unitPrice.toFixed(2)}</td>
+                                    <td><strong>$${item.totalPrice.toFixed(2)}</strong></td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="total-section">
+                    <div class="total-amount">
+                        <i class="fas fa-receipt me-2"></i>
+                        Total Amount: <strong>$${order.totalAmount.toFixed(2)}</strong>
+                    </div>
+                    <button class="btn btn-primary btn-lg" onclick="printReceipt('${containerId}')">
+                        <i class="fas fa-print me-2"></i>Print Receipt
+                    </button>
+                </div>
+            `;
+            document.getElementById(containerId).innerHTML = receiptHTML;
+            document.getElementById(containerId).style.display = 'block';
+        }
+
+        function printReceipt(containerId) {
+            const receiptContent = document.getElementById(containerId).innerHTML;
+            const printWindow = window.open('', '_blank', 'height=700,width=500,scrollbars=yes');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                    <head>
+                        <title>Pahana Edu - Receipt</title>
+                        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+                        <style>
+                            body { 
+                                font-family: 'Courier New', monospace; 
+                                padding: 20px; 
+                                font-size: 14px; 
+                                line-height: 1.4;
+                            }
+                            .receipt-header { 
+                                text-align: center; 
+                                margin-bottom: 25px; 
+                                border-bottom: 2px solid #000;
+                                padding-bottom: 15px;
+                            }
+                            .receipt-title {
+                                font-size: 18px;
+                                font-weight: bold;
+                                margin-bottom: 5px;
+                            }
+                            .receipt-subtitle {
+                                font-size: 12px;
+                                margin: 2px 0;
+                            }
+                            .table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin: 15px 0;
+                            }
+                            .table th, .table td {
+                                border: 1px solid #000;
+                                padding: 8px;
+                                text-align: left;
+                            }
+                            .table th {
+                                background: #f0f0f0;
+                                font-weight: bold;
+                            }
+                            .total-section { 
+                                text-align: center; 
+                                margin-top: 25px; 
+                                border-top: 2px solid #000;
+                                padding-top: 15px;
+                            }
+                            .total-amount {
+                                font-size: 16px;
+                                font-weight: bold;
+                                margin-bottom: 15px;
+                            }
+                            .btn { display: none !important; }
+                            @media print {
+                                body { margin: 0; padding: 10px; }
+                                .btn { display: none !important; }
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        ${receiptContent}
+                        <script>
+                            window.onload = function() {
+                                setTimeout(function() {
+                                    window.print();
+                                }, 500);
+                            }
+                        <\/script>
+                    </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        function printModalReceipt() {
+            printReceipt('modal-receipt');
+        }
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            event?.target?.classList?.add('active') || document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+            
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            
+            if (tabId === 'view-customers') fetchCustomers();
+            if (tabId === 'view-items') fetchItems();
+            if (tabId === 'view-orders') fetchOrders();
+            if (tabId === 'place-order') {
+                fetchCustomersForOrder();
+                fetchItemsForOrder();
+                document.getElementById('order-receipt').style.display = 'none';
+            }
+            if (['add-customer', 'add-item', 'place-order'].includes(tabId)) {
+                setTimeout(() => updateProgress(`${tabId}-form`, `${tabId}-progress`), 100);
+            }
+        }
+
+        document.getElementById('add-customer-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const button = e.target.querySelector('button[type="submit"]');
+            setButtonLoading(button);
+
+            const customer = {
+                accountNumber: document.getElementById('customer-account-number').value.trim(),
+                name: document.getElementById('customer-name').value.trim(),
+                email: document.getElementById('customer-email').value.trim(),
+                contact: document.getElementById('customer-contact').value.trim(),
+                address: document.getElementById('customer-address').value.trim(),
+                NIC: document.getElementById('customer-nic').value.trim(),
+                password: document.getElementById('customer-password').value,
+                unitsConsumed: parseInt(document.getElementById('customer-units-consumed').value) || 0
             };
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const statNumber = entry.target.querySelector('.stat-number');
-                        if (statNumber && !statNumber.dataset.animated) {
-                            animateNumber(statNumber);
-                            statNumber.dataset.animated = 'true';
+            const requiredFields = ['accountNumber', 'name', 'email', 'contact', 'address', 'NIC', 'password'];
+            const emptyFields = requiredFields.filter(field => !customer[field]);
+            
+            if (emptyFields.length > 0) {
+                showAlert('add-customer', 'error', `Please fill in the following required fields: ${emptyFields.join(', ')}`);
+                resetButton(button);
+                return;
+            }
+
+            if (isNaN(customer.unitsConsumed) || customer.unitsConsumed < 0) {
+                showAlert('add-customer', 'error', 'Units consumed must be a valid positive number.');
+                resetButton(button);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}customers`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json', 
+                        'Accept': 'application/json' 
+                    },
+                    body: JSON.stringify(customer)
+                });
+                
+                if (response.ok) {
+                    showAlert('add-customer', 'success', `Customer "${sanitizeInput(customer.name)}" has been successfully added to the system!`);
+                    document.getElementById('add-customer-form').reset();
+                    updateProgress('add-customer-form', 'add-customer-progress');
+                } else {
+                    const errorMessage = await response.text() || 'Unknown error occurred';
+                    showAlert('add-customer', 'error', `Failed to add customer: ${sanitizeInput(errorMessage)}`);
+                }
+            } catch (error) {
+                showAlert('add-customer', 'error', 'Network error: Unable to connect to server. Please check your connection and try again.');
+                console.error('Customer creation error:', error);
+            } finally {
+                resetButton(button);
+            }
+        });
+
+        async function fetchCustomers() {
+            try {
+                const response = await fetch(`${API_BASE_URL}customers`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const customers = await response.json();
+                const tbody = document.getElementById('customers-table');
+                tbody.innerHTML = '';
+                
+                if (customers.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <i class="fas fa-users fa-2x mb-2 d-block"></i>
+                                No customers found. Add your first customer to get started.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                customers.forEach((customer, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>${sanitizeInput(customer.accountNumber)}</strong></td>
+                        <td>${sanitizeInput(customer.name)}</td>
+                        <td>${sanitizeInput(customer.email)}</td>
+                        <td>${sanitizeInput(customer.contact)}</td>
+                        <td>${sanitizeInput(customer.address)}</td>
+                        <td>${sanitizeInput(customer.NIC)}</td>
+                        <td><span class="badge bg-primary">${customer.unitsConsumed} units</span></td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching customers:', error);
+                const tbody = document.getElementById('customers-table');
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="text-center text-danger py-4">
+                            <i class="fas fa-exclamation-triangle fa-2x mb-2 d-block"></i>
+                            Error loading customer data. Please refresh and try again.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        document.getElementById('add-item-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const button = e.target.querySelector('button[type="submit"]');
+            setButtonLoading(button);
+
+            const item = {
+                itemCode: document.getElementById('item-code').value.trim(),
+                itemName: document.getElementById('item-name').value.trim(),
+                unitPrice: parseFloat(document.getElementById('item-unit-price').value) || 0,
+                quantityInStock: parseInt(document.getElementById('item-quantity').value) || 0
+            };
+
+            const requiredFields = ['itemCode', 'itemName'];
+            const emptyFields = requiredFields.filter(field => !item[field]);
+            
+            if (emptyFields.length > 0) {
+                showAlert('add-item', 'error', `Please fill in the following required fields: ${emptyFields.join(', ')}`);
+                resetButton(button);
+                return;
+            }
+
+            if (isNaN(item.unitPrice) || item.unitPrice <= 0) {
+                showAlert('add-item', 'error', 'Unit price must be a valid positive number.');
+                resetButton(button);
+                return;
+            }
+
+            if (isNaN(item.quantityInStock) || item.quantityInStock < 0) {
+                showAlert('add-item', 'error', 'Quantity must be a valid non-negative number.');
+                resetButton(button);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}items`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json', 
+                        'Accept': 'application/json' 
+                    },
+                    body: JSON.stringify(item)
+                });
+                
+                if (response.ok) {
+                    showAlert('add-item', 'success', `Item "${sanitizeInput(item.itemName)}" has been successfully added to the inventory!`);
+                    document.getElementById('add-item-form').reset();
+                    updateProgress('add-item-form', 'add-item-progress');
+                } else {
+                    const errorMessage = await response.text() || 'Unknown error occurred';
+                    showAlert('add-item', 'error', `Failed to add item: ${sanitizeInput(errorMessage)}`);
+                }
+            } catch (error) {
+                showAlert('add-item', 'error', 'Network error: Unable to connect to server. Please check your connection and try again.');
+                console.error('Item creation error:', error);
+            } finally {
+                resetButton(button);
+            }
+        });
+
+        async function fetchItems() {
+            try {
+                const response = await fetch(`${API_BASE_URL}items`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const items = await response.json();
+                const tbody = document.getElementById('items-table');
+                tbody.innerHTML = '';
+                
+                if (items.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="4" class="text-center text-muted py-4">
+                                <i class="fas fa-boxes fa-2x mb-2 d-block"></i>
+                                No items found in inventory. Add your first item to get started.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                items.forEach(item => {
+                    const row = document.createElement('tr');
+                    const stockStatus = item.quantityInStock < 10 ? 'warning' : 'success';
+                    const stockIcon = item.quantityInStock < 10 ? 'fa-exclamation-triangle' : 'fa-check-circle';
+                    
+                    row.innerHTML = `
+                        <td><strong>${sanitizeInput(item.itemCode)}</strong></td>
+                        <td>${sanitizeInput(item.itemName)}</td>
+                        <td><strong>$${item.unitPrice.toFixed(2)}</strong></td>
+                        <td>
+                            <span class="badge bg-${stockStatus}">
+                                <i class="fas ${stockIcon} me-1"></i>
+                                ${item.quantityInStock} units
+                            </span>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching items:', error);
+                const tbody = document.getElementById('items-table');
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4" class="text-center text-danger py-4">
+                            <i class="fas fa-exclamation-triangle fa-2x mb-2 d-block"></i>
+                            Error loading inventory data. Please refresh and try again.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        async function fetchCustomersForOrder() {
+            try {
+                const response = await fetch(`${API_BASE_URL}customers`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const customers = await response.json();
+                const select = document.getElementById('order-customer');
+                select.innerHTML = '<option value="">Choose a customer from the list</option>';
+                
+                customers.forEach(customer => {
+                    const option = document.createElement('option');
+                    option.value = JSON.stringify({ 
+                        accountNumber: customer.accountNumber, 
+                        name: customer.name 
+                    });
+                    option.textContent = `${sanitizeInput(customer.name)} (${sanitizeInput(customer.accountNumber)})`;
+                    select.appendChild(option);
+                });
+                
+                updateProgress('place-order-form', 'place-order-progress');
+            } catch (error) {
+                console.error('Error fetching customers for order:', error);
+                const select = document.getElementById('order-customer');
+                select.innerHTML = '<option value="">Error loading customers - please refresh</option>';
+            }
+        }
+
+        async function fetchItemsForOrder() {
+            try {
+                const response = await fetch(`${API_BASE_URL}items`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const items = await response.json();
+                const selects = document.querySelectorAll('.order-item-code');
+                
+                selects.forEach(select => {
+                    select.innerHTML = '<option value="">Select a product</option>';
+                    items.forEach(item => {
+                        const option = document.createElement('option');
+                        option.value = JSON.stringify(item);
+                        option.textContent = `${sanitizeInput(item.itemName)} (${sanitizeInput(item.itemCode)}) - Stock: ${item.quantityInStock}`;
+                        if (item.quantityInStock === 0) {
+                            option.disabled = true;
+                            option.textContent += ' - Out of Stock';
+                        }
+                        select.appendChild(option);
+                    });
+                });
+                
+                updateProgress('place-order-form', 'place-order-progress');
+            } catch (error) {
+                console.error('Error fetching items for order:', error);
+                const selects = document.querySelectorAll('.order-item-code');
+                selects.forEach(select => {
+                    select.innerHTML = '<option value="">Error loading products - please refresh</option>';
+                });
+            }
+        }
+
+        function addOrderItem() {
+            const container = document.getElementById('order-items-container');
+            const newItem = document.createElement('div');
+            newItem.className = 'order-item';
+            newItem.innerHTML = `
+                <div class="form-group">
+                    <label class="form-label">Product Selection *</label>
+                    <div class="input-group">
+                        <select class="form-control with-icon order-item-code" required aria-describedby="itemSelectHelp">
+                            <option value="">Select a product</option>
+                        </select>
+                        <i class="fas fa-box-open input-icon"></i>
+                    </div>
+                    <div class="form-help" id="itemSelectHelp">Choose a product for this order line</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Quantity *</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control with-icon order-item-quantity" min="1" required aria-describedby="itemQuantityHelp">
+                        <i class="fas fa-cubes input-icon"></i>
+                    </div>
+                    <div class="form-help" id="itemQuantityHelp">Number of units to order</div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeOrderItem(this)">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                </div>
+            `;
+            container.appendChild(newItem);
+            fetchItemsForOrder();
+            updateProgress('place-order-form', 'place-order-progress');
+        }
+
+        function removeOrderItem(button) {
+            const orderItem = button.closest('.order-item');
+            const container = document.getElementById('order-items-container');
+            
+            if (container.children.length > 1) {
+                orderItem.remove();
+                updateProgress('place-order-form', 'place-order-progress');
+            }
+        }
+
+        document.getElementById('place-order-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const button = e.target.querySelector('button[type="submit"]');
+            setButtonLoading(button);
+
+            try {
+                const customerData = JSON.parse(document.getElementById('order-customer').value || '{}');
+                const customerAccountNumber = customerData.accountNumber;
+                const customerName = customerData.name;
+                
+                if (!customerAccountNumber) {
+                    showAlert('place-order', 'error', 'Please select a customer for this order.');
+                    resetButton(button);
+                    return;
+                }
+
+                const orderItems = [];
+                let totalAmount = 0;
+                let hasErrors = false;
+
+                document.querySelectorAll('.order-item').forEach((itemDiv, index) => {
+                    const itemSelect = itemDiv.querySelector('.order-item-code');
+                    const quantityInput = itemDiv.querySelector('.order-item-quantity');
+                    
+                    if (itemSelect.value && quantityInput.value) {
+                        try {
+                            const item = JSON.parse(itemSelect.value);
+                            const quantity = parseInt(quantityInput.value);
+                            
+                            if (quantity <= 0) {
+                                showAlert('place-order', 'error', `Quantity for item ${index + 1} must be greater than 0.`);
+                                hasErrors = true;
+                                return;
+                            }
+                            
+                            if (quantity > item.quantityInStock) {
+                                showAlert('place-order', 'error', `Quantity for "${item.itemName}" exceeds available stock (${item.quantityInStock} units).`);
+                                hasErrors = true;
+                                return;
+                            }
+                            
+                            const totalPrice = item.unitPrice * quantity;
+                            orderItems.push({
+                                itemCode: item.itemCode,
+                                itemName: item.itemName,
+                                quantity: quantity,
+                                unitPrice: item.unitPrice,
+                                totalPrice: totalPrice
+                            });
+                            totalAmount += totalPrice;
+                        } catch (error) {
+                            showAlert('place-order', 'error', `Invalid item data for item ${index + 1}.`);
+                            hasErrors = true;
                         }
                     }
                 });
-            }, observerOptions);
 
-            document.querySelectorAll('.stat-card').forEach(card => {
-                observer.observe(card);
+                if (hasErrors) {
+                    resetButton(button);
+                    return;
+                }
+
+                if (orderItems.length === 0) {
+                    showAlert('place-order', 'error', 'Please add at least one item to the order with valid quantity.');
+                    resetButton(button);
+                    return;
+                }
+
+                const order = {
+                    customerAccountNumber,
+                    customerName,
+                    orderItems,
+                    totalAmount
+                };
+
+                const response = await fetch(`${API_BASE_URL}orders`, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json', 
+                        'Accept': 'application/json' 
+                    },
+                    body: JSON.stringify(order)
+                });
+                
+                if (response.ok) {
+                    const responseData = await response.json();
+                    order.orderId = responseData.orderId || 'ORD-' + Date.now();
+                    
+                    showAlert('place-order', 'success', `Order placed successfully! Total amount: $${totalAmount.toFixed(2)}`);
+                    displayReceipt(order, 'order-receipt');
+                    
+                    document.getElementById('place-order-form').reset();
+                    document.getElementById('order-items-container').innerHTML = `
+                        <div class="order-item">
+                            <div class="form-group">
+                                <label class="form-label">Product Selection *</label>
+                                <div class="input-group">
+                                    <select class="form-control with-icon order-item-code" required aria-describedby="itemSelectHelp">
+                                        <option value="">Select a product</option>
+                                    </select>
+                                    <i class="fas fa-box-open input-icon"></i>
+                                </div>
+                                <div class="form-help" id="itemSelectHelp">Choose a product for this order line</div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Quantity *</label>
+                                <div class="input-group">
+                                    <input type="number" class="form-control with-icon order-item-quantity" min="1" required aria-describedby="itemQuantityHelp">
+                                    <i class="fas fa-cubes input-icon"></i>
+                                </div>
+                                <div class="form-help" id="itemQuantityHelp">Number of units to order</div>
+                            </div>
+                            <div class="form-group">
+                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeOrderItem(this)">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    fetchItemsForOrder();
+                    updateProgress('place-order-form', 'place-order-progress');
+                } else {
+                    const errorMessage = await response.text() || 'Unknown error occurred';
+                    showAlert('place-order', 'error', `Failed to place order: ${sanitizeInput(errorMessage)}`);
+                }
+            } catch (error) {
+                showAlert('place-order', 'error', 'Network error: Unable to connect to server. Please check your connection and try again.');
+                console.error('Order placement error:', error);
+            } finally {
+                resetButton(button);
+            }
+        });
+
+        async function fetchOrders() {
+            try {
+                const response = await fetch(`${API_BASE_URL}orders`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const orders = await response.json();
+                const tbody = document.getElementById('orders-table');
+                tbody.innerHTML = '';
+                
+                if (orders.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">
+                                <i class="fas fa-shopping-cart fa-2x mb-2 d-block"></i>
+                                No orders found. Place your first order to get started.
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                orders.forEach(order => {
+                    const itemsList = order.orderItems.map(item => `
+                        <div class="mb-1">
+                            <strong>${sanitizeInput(item.itemName)}</strong><br>
+                            <small class="text-muted">
+                                Code: ${sanitizeInput(item.itemCode)} | 
+                                Qty: ${item.quantity} | 
+                                Unit: $${item.unitPrice.toFixed(2)} | 
+                                Total: $${item.totalPrice.toFixed(2)}
+                            </small>
+                        </div>
+                    `).join('');
+                    
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>#${order.orderId || 'N/A'}</strong></td>
+                        <td>${sanitizeInput(order.customerAccountNumber)}</td>
+                        <td><strong>${sanitizeInput(order.customerName)}</strong></td>
+                        <td>${itemsList}</td>
+                        <td><strong class="text-success">$${order.totalAmount.toFixed(2)}</strong></td>
+                        <td>
+                            <button class="btn btn-outline-primary btn-sm" onclick='showOrderReceipt(${JSON.stringify(order).replace(/'/g, "\\'")})'>
+                                <i class="fas fa-receipt me-1"></i>View Receipt
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+                const tbody = document.getElementById('orders-table');
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center text-danger py-4">
+                            <i class="fas fa-exclamation-triangle fa-2x mb-2 d-block"></i>
+                            Error loading order data. Please refresh and try again.
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function showOrderReceipt(order) {
+            displayReceipt(order, 'modal-receipt');
+            const receiptModal = new bootstrap.Modal(document.getElementById('receiptModal'));
+            receiptModal.show();
+        }
+
+        document.getElementById('customer-contact').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 0) {
+                if (value.startsWith('0')) {
+                    value = '94' + value.substring(1);
+                } else if (!value.startsWith('94')) {
+                    value = '94' + value;
+                }
+                
+                if (value.length > 11) {
+                    value = value.substring(0, 11);
+                }
+            }
+            
+            e.target.value = value ? '+' + value : '';
+            updateProgress('add-customer-form', 'add-customer-progress');
+        });
+
+        ['add-customer-form', 'add-item-form', 'place-order-form'].forEach(formId => {
+            const form = document.getElementById(formId);
+            const inputs = form.querySelectorAll('input[required], select[required]');
+            
+            inputs.forEach(input => {
+                ['input', 'change', 'blur'].forEach(eventType => {
+                    input.addEventListener(eventType, () => {
+                        updateProgress(formId, `${formId.replace('-form', '')}-progress`);
+                        
+                        if (input.checkValidity()) {
+                            input.classList.remove('is-invalid');
+                            input.classList.add('is-valid');
+                        } else if (input.value.trim() !== '') {
+                            input.classList.remove('is-valid');
+                            input.classList.add('is-invalid');
+                        } else {
+                            input.classList.remove('is-valid', 'is-invalid');
+                        }
+                    });
+                });
             });
+        });
 
-            function animateNumber(element) {
-                const target = parseInt(element.textContent.replace(/[Rs ,]/g, '')) || 0;
-                const duration = 1500;
-                const start = performance.now();
-                const prefix = element.textContent.includes('Rs') ? 'Rs ' : '';
-                
-                function updateNumber(currentTime) {
-                    const elapsed = currentTime - start;
-                    const progress = Math.min(elapsed / duration, 1);
-                    const current = Math.floor(target * easeOutCubic(progress));
-                    
-                    element.textContent = prefix + current.toLocaleString(
-                        element.id === 'dailyRevenue' ? 'en-US' : undefined,
-                        element.id === 'dailyRevenue' ? { minimumFractionDigits: 2, maximumFractionDigits: 2 } : undefined
-                    );
-                    
-                    if (progress < 1) {
-                        requestAnimationFrame(updateNumber);
-                    }
-                }
-                
-                requestAnimationFrame(updateNumber);
+        document.addEventListener('DOMContentLoaded', function() {
+            showTab('add-customer');
+            
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease-in-out';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 100);
+            
+            if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+                tooltipTriggerList.map(function (tooltipTriggerEl) {
+                    return new bootstrap.Tooltip(tooltipTriggerEl);
+                });
             }
+            
+            console.log('Pahana Edu Billing System initialized successfully');
+        });
 
-            function easeOutCubic(t) {
-                return 1 - Math.pow(1 - t, 3);
-            }
+        window.addEventListener('online', function() {
+            showAlert('add-customer', 'success', 'Connection restored. You can now proceed with your tasks.');
+        });
 
-            // Add CSS animation keyframes
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes ripple {
-                    to {
-                        transform: scale(2);
-                        opacity: 0;
-                    }
-                }
-                
-                @keyframes fadeOut {
-                    to {
-                        opacity: 0;
-                        transform: scale(0.95);
-                    }
-                }
-            `;
-            document.head.appendChild(style);
+        window.addEventListener('offline', function() {
+            showAlert('add-customer', 'error', 'No internet connection. Some features may not work properly.');
         });
     </script>
 </body>

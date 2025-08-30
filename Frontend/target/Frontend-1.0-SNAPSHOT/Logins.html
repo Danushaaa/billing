@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pahana Edu - Cashier Access</title>
+    <title>Pahana Edu - Login</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -302,6 +302,75 @@
             font-weight: 300;
         }
 
+        .select-wrapper {
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .select-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .select-wrapper:focus-within::before {
+            left: 100%;
+        }
+
+        .select-wrapper:focus-within {
+            border-color: #00d4ff;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .select-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.5);
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+
+        .select-wrapper:focus-within .select-icon {
+            color: #00d4ff;
+        }
+
+        select.form-input {
+            padding: 20px 20px 20px 60px;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            cursor: pointer;
+            color: black;
+        }
+
+        select.form-input::-ms-expand {
+            display: none;
+        }
+
+        .select-arrow {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 18px;
+            pointer-events: none;
+            z-index: 3;
+        }
+
         .password-toggle {
             position: absolute;
             right: 20px;
@@ -503,7 +572,7 @@
             <h1 class="brand-title">PAHANA</h1>
             <p class="brand-subtitle">Education Platform</p>
             <p class="tagline">
-                Streamlining educational transactions with secure and efficient cashier services.
+                Empowering educational excellence through innovative technology and seamless services.
             </p>
         </div>
 
@@ -512,10 +581,10 @@
             <div class="login-header">
                 <h2 class="login-title">
                     <i class="fas fa-shield-alt"></i>
-                    Cashier Access
+                    Secure Access
                 </h2>
                 <p class="login-description">
-                    Securely access your cashier dashboard to manage transactions.
+                    Access your dashboard by selecting your role and entering your credentials.
                 </p>
             </div>
 
@@ -523,9 +592,21 @@
                 <div id="alertContainer"></div>
 
                 <div class="input-group">
+                    <div class="select-wrapper">
+                        <i class="select-icon fas fa-user-tag"></i>
+                        <select class="form-input" id="roleSelect" required>
+                            <option value="" disabled selected>Select Role</option>
+                            <option value="admin">Administrator</option>
+                            <option value="cashier">Cashier</option>
+                        </select>
+                        <i class="select-arrow fas fa-chevron-down"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
                     <div class="input-wrapper">
                         <i class="input-icon fas fa-user-shield"></i>
-                        <input type="text" class="form-input" id="cashierId" placeholder="Cashier ID" required>
+                        <input type="text" class="form-input" id="userId" placeholder="Username" required>
                     </div>
                 </div>
 
@@ -558,11 +639,17 @@
     <script>
         // Enhanced form functionality
         const form = document.getElementById('loginForm');
-        const cashierIdInput = document.getElementById('cashierId');
+        const roleSelect = document.getElementById('roleSelect');
+        const userIdInput = document.getElementById('userId');
         const passwordInput = document.getElementById('password');
         const loginBtn = document.getElementById('loginBtn');
         const togglePassword = document.getElementById('togglePassword');
         const alertContainer = document.getElementById('alertContainer');
+
+        // Update placeholder based on role selection
+        roleSelect.addEventListener('change', () => {
+            userIdInput.placeholder = roleSelect.value === 'admin' ? 'Administrator Username' : 'Cashier ID';
+        });
 
         // Password visibility toggle
         togglePassword.addEventListener('click', () => {
@@ -597,7 +684,7 @@
                 input.focus();
                 return false;
             }
-            if (value.length < minLength) {
+            if (minLength && value.length < minLength) {
                 showAlert(`${fieldName} must be at least ${minLength} characters`);
                 input.focus();
                 return false;
@@ -605,7 +692,7 @@
             return true;
         }
 
-        // Form submission with enhanced error handling
+        // Form submission with role-based authentication
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -613,7 +700,8 @@
             alertContainer.innerHTML = '';
 
             // Validate inputs
-            if (!validateInput(cashierIdInput, 3, 'Cashier ID')) return;
+            if (!validateInput(roleSelect, null, 'Role')) return;
+            if (!validateInput(userIdInput, 3, roleSelect.value === 'admin' ? 'Username' : 'Cashier ID')) return;
             if (!validateInput(passwordInput, 4, 'Password')) return;
 
             // Show loading state
@@ -621,30 +709,36 @@
             loginBtn.innerHTML = '';
 
             try {
-                const response = await fetch('http://localhost:8080/Backend/resources/cashiers/login', {
+                const isAdmin = roleSelect.value === 'admin';
+                const endpoint = isAdmin 
+                    ? 'http://localhost:8080/Backend/resources/auth/login'
+                    : 'http://localhost:8080/Backend/resources/cashiers/login';
+                const payload = isAdmin 
+                    ? { username: userIdInput.value.trim(), password: passwordInput.value }
+                    : { cashierId: userIdInput.value.trim(), password: passwordInput.value };
+
+                const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                     },
-                    body: JSON.stringify({
-                        cashierId: cashierIdInput.value.trim(),
-                        password: passwordInput.value
-                    })
+                    body: JSON.stringify(payload)
                 });
 
                 if (response.ok) {
-                    const cashierData = await response.json();
-                    showAlert(`Authentication successful! Welcome, ${cashierData.name}`, 'success');
+                    const userData = await response.json();
+                    const userName = isAdmin ? userData.username : userData.name;
+                    showAlert(`Authentication successful! Welcome, ${userName}`, 'success');
                     
-                    // Simulate loading delay for better UX
+                    // Redirect based on role
                     setTimeout(() => {
-                        window.location.href = 'Cashier Dashboard.html';
+                        window.location.href = isAdmin ? 'Admin Dashboard.html' : 'Cashier Dashboard.html';
                     }, 2000);
                 } else {
                     const errorData = await response.json().catch(() => ({}));
                     const errorMessage = errorData.message || response.status === 401 
-                        ? 'Invalid credentials. Please check your cashier ID and password.' 
+                        ? `Invalid credentials. Please check your ${isAdmin ? 'username' : 'cashier ID'} and password.` 
                         : 'Authentication failed. Please try again.';
                     showAlert(errorMessage);
                 }
@@ -661,11 +755,11 @@
         });
 
         // Real-time input validation visual feedback
-        [cashierIdInput, passwordInput].forEach(input => {
+        [roleSelect, userIdInput, passwordInput].forEach(input => {
             input.addEventListener('input', function() {
-                const wrapper = this.closest('.input-wrapper');
+                const wrapper = this.closest('.input-wrapper, .select-wrapper');
                 if (this.value.length > 0) {
-                    wrapper.style.borderColor = this.value.length >= (this.id === 'cashierId' ? 3 : 4) 
+                    wrapper.style.borderColor = this === roleSelect || this.value.length >= (this.id === 'userId' ? 3 : 4) 
                         ? 'rgba(50, 215, 75, 0.5)' 
                         : 'rgba(255, 59, 48, 0.5)';
                 } else {
@@ -674,7 +768,7 @@
             });
 
             input.addEventListener('blur', function() {
-                const wrapper = this.closest('.input-wrapper');
+                const wrapper = this.closest('.input-wrapper, .select-wrapper');
                 wrapper.style.borderColor = 'rgba(255, 255, 255, 0.1)';
             });
         });
