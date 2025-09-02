@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: DAO.AdminDAOTest
 -------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.385 s -- in DAO.AdminDAOTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.304 s -- in DAO.AdminDAOTest

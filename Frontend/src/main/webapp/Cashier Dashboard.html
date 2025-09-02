@@ -719,7 +719,7 @@
                 <button class="tab-button" onclick="showTab('view-items')">
                     <i class="fas fa-boxes"></i>View Items
                 </button>
-                <button class="tab-button" onclick="showTab('place-order')">
+                <button class="tab-button" onclick="window.location.href='billing.html'">
                     <i class="fas fa-shopping-cart"></i>Place Order
                 </button>
                 <button class="tab-button" onclick="showTab('view-orders')">
@@ -950,81 +950,6 @@
                                 <tbody id="items-table"></tbody>
                             </table>
                         </div>
-                    </div>
-
-                    <!-- Place Order -->
-                    <div id="place-order" class="tab-content">
-                        <div class="progress">
-                            <div class="progress-bar" id="place-order-progress" style="width: 0%"></div>
-                        </div>
-                        <div class="alert alert-success" id="place-order-success">
-                            <i class="fas fa-check-circle me-2"></i>
-                            <span id="place-order-success-message"></span>
-                        </div>
-                        <div class="alert alert-danger" id="place-order-error">
-                            <i class="fas fa-exclamation-triangle me-2"></i>
-                            <span id="place-order-error-message"></span>
-                        </div>
-                        <form id="place-order-form">
-                            <div class="form-section">
-                                <h3 class="section-title">
-                                    <i class="fas fa-shopping-cart"></i>
-                                    Order Configuration
-                                </h3>
-                                <div class="form-group">
-                                    <label for="order-customer" class="form-label">Select Customer *</label>
-                                    <div class="input-group">
-                                        <select class="form-control with-icon" id="order-customer" required aria-describedby="customerHelp">
-                                            <option value="">Choose a customer from the list</option>
-                                        </select>
-                                        <i class="fas fa-user input-icon"></i>
-                                    </div>
-                                    <div class="form-help" id="customerHelp">Select the customer placing this order</div>
-                                </div>
-                                <div id="order-items-container">
-                                    <div class="order-item">
-                                        <div class="form-group">
-                                            <label class="form-label">Product Selection *</label>
-                                            <div class="input-group">
-                                                <select class="form-control with-icon order-item-code" required aria-describedby="itemSelectHelp">
-                                                    <option value="">Select a product</option>
-                                                </select>
-                                                <i class="fas fa-box-open input-icon"></i>
-                                            </div>
-                                            <div class="form-help" id="itemSelectHelp">Choose a product for this order line</div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label">Quantity *</label>
-                                            <div class="input-group">
-                                                <input type="number" class="form-control with-icon order-item-quantity" min="1" required aria-describedby="itemQuantityHelp">
-                                                <i class="fas fa-cubes input-icon"></i>
-                                            </div>
-                                            <div class="form-help" id="itemQuantityHelp">Number of units to order</div>
-                                        </div>
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeOrderItem(this)">
-                                                <i class="fas fa-trash"></i> Remove
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-secondary mb-3" onclick="addOrderItem()">
-                                    <i class="fas fa-plus"></i>Add Another Product
-                                </button>
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary btn-lg position-relative" aria-label="Place order">
-                                    <span class="btn-text">
-                                        <i class="fas fa-shopping-cart"></i>
-                                        Process Order
-                                    </span>
-                                    <div class="loading">
-                                        <div class="spinner"></div>
-                                    </div>
-                                </button>
-                            </div>
-                        </form>
-                        <div id="order-receipt" class="bill-receipt" style="display: none;"></div>
                     </div>
 
                     <!-- View Orders -->
@@ -1293,20 +1218,15 @@
 
         function showTab(tabId) {
             document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-            event?.target?.classList?.add('active') || document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+            event?.target?.classList?.add('active') || document.querySelector(`[onclick="showTab('${tabId}')"]`)?.classList.add('active');
             
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            document.getElementById(tabId)?.classList.add('active');
             
             if (tabId === 'view-customers') fetchCustomers();
             if (tabId === 'view-items') fetchItems();
             if (tabId === 'view-orders') fetchOrders();
-            if (tabId === 'place-order') {
-                fetchCustomersForOrder();
-                fetchItemsForOrder();
-                document.getElementById('order-receipt').style.display = 'none';
-            }
-            if (['add-customer', 'add-item', 'place-order'].includes(tabId)) {
+            if (['add-customer', 'add-item'].includes(tabId)) {
                 setTimeout(() => updateProgress(`${tabId}-form`, `${tabId}-progress`), 100);
             }
         }
@@ -1532,246 +1452,6 @@
             }
         }
 
-        async function fetchCustomersForOrder() {
-            try {
-                const response = await fetch(`${API_BASE_URL}customers`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const customers = await response.json();
-                const select = document.getElementById('order-customer');
-                select.innerHTML = '<option value="">Choose a customer from the list</option>';
-                
-                customers.forEach(customer => {
-                    const option = document.createElement('option');
-                    option.value = JSON.stringify({ 
-                        accountNumber: customer.accountNumber, 
-                        name: customer.name 
-                    });
-                    option.textContent = `${sanitizeInput(customer.name)} (${sanitizeInput(customer.accountNumber)})`;
-                    select.appendChild(option);
-                });
-                
-                updateProgress('place-order-form', 'place-order-progress');
-            } catch (error) {
-                console.error('Error fetching customers for order:', error);
-                const select = document.getElementById('order-customer');
-                select.innerHTML = '<option value="">Error loading customers - please refresh</option>';
-            }
-        }
-
-        async function fetchItemsForOrder() {
-            try {
-                const response = await fetch(`${API_BASE_URL}items`);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const items = await response.json();
-                const selects = document.querySelectorAll('.order-item-code');
-                
-                selects.forEach(select => {
-                    select.innerHTML = '<option value="">Select a product</option>';
-                    items.forEach(item => {
-                        const option = document.createElement('option');
-                        option.value = JSON.stringify(item);
-                        option.textContent = `${sanitizeInput(item.itemName)} (${sanitizeInput(item.itemCode)}) - Stock: ${item.quantityInStock}`;
-                        if (item.quantityInStock === 0) {
-                            option.disabled = true;
-                            option.textContent += ' - Out of Stock';
-                        }
-                        select.appendChild(option);
-                    });
-                });
-                
-                updateProgress('place-order-form', 'place-order-progress');
-            } catch (error) {
-                console.error('Error fetching items for order:', error);
-                const selects = document.querySelectorAll('.order-item-code');
-                selects.forEach(select => {
-                    select.innerHTML = '<option value="">Error loading products - please refresh</option>';
-                });
-            }
-        }
-
-        function addOrderItem() {
-            const container = document.getElementById('order-items-container');
-            const newItem = document.createElement('div');
-            newItem.className = 'order-item';
-            newItem.innerHTML = `
-                <div class="form-group">
-                    <label class="form-label">Product Selection *</label>
-                    <div class="input-group">
-                        <select class="form-control with-icon order-item-code" required aria-describedby="itemSelectHelp">
-                            <option value="">Select a product</option>
-                        </select>
-                        <i class="fas fa-box-open input-icon"></i>
-                    </div>
-                    <div class="form-help" id="itemSelectHelp">Choose a product for this order line</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Quantity *</label>
-                    <div class="input-group">
-                        <input type="number" class="form-control with-icon order-item-quantity" min="1" required aria-describedby="itemQuantityHelp">
-                        <i class="fas fa-cubes input-icon"></i>
-                    </div>
-                    <div class="form-help" id="itemQuantityHelp">Number of units to order</div>
-                </div>
-                <div class="form-group">
-                    <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeOrderItem(this)">
-                        <i class="fas fa-trash"></i> Remove
-                    </button>
-                </div>
-            `;
-            container.appendChild(newItem);
-            fetchItemsForOrder();
-            updateProgress('place-order-form', 'place-order-progress');
-        }
-
-        function removeOrderItem(button) {
-            const orderItem = button.closest('.order-item');
-            const container = document.getElementById('order-items-container');
-            
-            if (container.children.length > 1) {
-                orderItem.remove();
-                updateProgress('place-order-form', 'place-order-progress');
-            }
-        }
-
-        document.getElementById('place-order-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const button = e.target.querySelector('button[type="submit"]');
-            setButtonLoading(button);
-
-            try {
-                const customerData = JSON.parse(document.getElementById('order-customer').value || '{}');
-                const customerAccountNumber = customerData.accountNumber;
-                const customerName = customerData.name;
-                
-                if (!customerAccountNumber) {
-                    showAlert('place-order', 'error', 'Please select a customer for this order.');
-                    resetButton(button);
-                    return;
-                }
-
-                const orderItems = [];
-                let totalAmount = 0;
-                let hasErrors = false;
-
-                document.querySelectorAll('.order-item').forEach((itemDiv, index) => {
-                    const itemSelect = itemDiv.querySelector('.order-item-code');
-                    const quantityInput = itemDiv.querySelector('.order-item-quantity');
-                    
-                    if (itemSelect.value && quantityInput.value) {
-                        try {
-                            const item = JSON.parse(itemSelect.value);
-                            const quantity = parseInt(quantityInput.value);
-                            
-                            if (quantity <= 0) {
-                                showAlert('place-order', 'error', `Quantity for item ${index + 1} must be greater than 0.`);
-                                hasErrors = true;
-                                return;
-                            }
-                            
-                            if (quantity > item.quantityInStock) {
-                                showAlert('place-order', 'error', `Quantity for "${item.itemName}" exceeds available stock (${item.quantityInStock} units).`);
-                                hasErrors = true;
-                                return;
-                            }
-                            
-                            const totalPrice = item.unitPrice * quantity;
-                            orderItems.push({
-                                itemCode: item.itemCode,
-                                itemName: item.itemName,
-                                quantity: quantity,
-                                unitPrice: item.unitPrice,
-                                totalPrice: totalPrice
-                            });
-                            totalAmount += totalPrice;
-                        } catch (error) {
-                            showAlert('place-order', 'error', `Invalid item data for item ${index + 1}.`);
-                            hasErrors = true;
-                        }
-                    }
-                });
-
-                if (hasErrors) {
-                    resetButton(button);
-                    return;
-                }
-
-                if (orderItems.length === 0) {
-                    showAlert('place-order', 'error', 'Please add at least one item to the order with valid quantity.');
-                    resetButton(button);
-                    return;
-                }
-
-                const order = {
-                    customerAccountNumber,
-                    customerName,
-                    orderItems,
-                    totalAmount
-                };
-
-                const response = await fetch(`${API_BASE_URL}orders`, {
-                    method: 'POST',
-                    headers: { 
-                        'Content-Type': 'application/json', 
-                        'Accept': 'application/json' 
-                    },
-                    body: JSON.stringify(order)
-                });
-                
-                if (response.ok) {
-                    const responseData = await response.json();
-                    order.orderId = responseData.orderId || 'ORD-' + Date.now();
-                    
-                    showAlert('place-order', 'success', `Order placed successfully! Total amount: $${totalAmount.toFixed(2)}`);
-                    displayReceipt(order, 'order-receipt');
-                    
-                    document.getElementById('place-order-form').reset();
-                    document.getElementById('order-items-container').innerHTML = `
-                        <div class="order-item">
-                            <div class="form-group">
-                                <label class="form-label">Product Selection *</label>
-                                <div class="input-group">
-                                    <select class="form-control with-icon order-item-code" required aria-describedby="itemSelectHelp">
-                                        <option value="">Select a product</option>
-                                    </select>
-                                    <i class="fas fa-box-open input-icon"></i>
-                                </div>
-                                <div class="form-help" id="itemSelectHelp">Choose a product for this order line</div>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Quantity *</label>
-                                <div class="input-group">
-                                    <input type="number" class="form-control with-icon order-item-quantity" min="1" required aria-describedby="itemQuantityHelp">
-                                    <i class="fas fa-cubes input-icon"></i>
-                                </div>
-                                <div class="form-help" id="itemQuantityHelp">Number of units to order</div>
-                            </div>
-                            <div class="form-group">
-                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeOrderItem(this)">
-                                    <i class="fas fa-trash"></i> Remove
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    fetchItemsForOrder();
-                    updateProgress('place-order-form', 'place-order-progress');
-                } else {
-                    const errorMessage = await response.text() || 'Unknown error occurred';
-                    showAlert('place-order', 'error', `Failed to place order: ${sanitizeInput(errorMessage)}`);
-                }
-            } catch (error) {
-                showAlert('place-order', 'error', 'Network error: Unable to connect to server. Please check your connection and try again.');
-                console.error('Order placement error:', error);
-            } finally {
-                resetButton(button);
-            }
-        });
-
         async function fetchOrders() {
             try {
                 const response = await fetch(`${API_BASE_URL}orders`);
@@ -1836,6 +1516,7 @@
                 `;
             }
         }
+        
 
         function showOrderReceipt(order) {
             displayReceipt(order, 'modal-receipt');
@@ -1862,7 +1543,7 @@
             updateProgress('add-customer-form', 'add-customer-progress');
         });
 
-        ['add-customer-form', 'add-item-form', 'place-order-form'].forEach(formId => {
+        ['add-customer-form', 'add-item-form'].forEach(formId => {
             const form = document.getElementById(formId);
             const inputs = form.querySelectorAll('input[required], select[required]');
             

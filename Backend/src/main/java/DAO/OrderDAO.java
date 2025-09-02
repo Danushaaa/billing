@@ -3,7 +3,7 @@ package DAO;
 import DBUtil.DatabaseUtil;
 import Model.Order;
 import Model.Order.OrderItem;
-import Model.Item; // Added missing import for Item class
+import Model.Item;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,44 +13,81 @@ import java.util.List;
 
 public class OrderDAO {
     public boolean addOrder(Order order) throws SQLException {
+        System.out.println("Starting addOrder for customer: " + order.getCustomerAccountNumber());
+        System.out.println("Order items: " + order.getOrderItems().size());
+
         // Check if customer exists
         CustomerDAO customerDAO = new CustomerDAO();
         if (customerDAO.getCustomer(order.getCustomerAccountNumber()) == null) {
+            System.out.println("Customer not found: " + order.getCustomerAccountNumber());
             throw new SQLException("Customer with account number " + order.getCustomerAccountNumber() + " does not exist.");
         }
 
         String insertOrderSql = "INSERT INTO orders (customer_account_number, customer_name, item_code, item_name, quantity, unit_price, total_price) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String selectItemSql = "SELECT quantity_in_stock FROM items WHERE item_code = ?";
+        String updateStockSql = "UPDATE items SET quantity_in_stock = quantity_in_stock - ? WHERE item_code = ? AND quantity_in_stock >= ?";
+
         Connection conn = DatabaseUtil.getConnection();
         try {
             conn.setAutoCommit(false); // Start transaction
-            try (PreparedStatement stmt = conn.prepareStatement(insertOrderSql)) {
-                for (OrderItem orderItem : order.getOrderItems()) {
-                    // Verify item exists
-                    ItemDAO itemDAO = new ItemDAO();
-                    Item item = itemDAO.getItem(orderItem.getItemCode());
-                    if (item == null) {
+            ItemDAO itemDAO = new ItemDAO();
+
+            // Process each order item
+            for (OrderItem orderItem : order.getOrderItems()) {
+                System.out.println("Processing item: " + orderItem.getItemCode() + ", Quantity: " + orderItem.getQuantity());
+
+                // Verify item exists and get current stock
+                try (PreparedStatement selectStmt = conn.prepareStatement(selectItemSql)) {
+                    selectStmt.setString(1, orderItem.getItemCode());
+                    ResultSet rs = selectStmt.executeQuery();
+                    if (!rs.next()) {
+                        System.out.println("Item not found: " + orderItem.getItemCode());
                         throw new SQLException("Item with code " + orderItem.getItemCode() + " does not exist.");
                     }
-                    if (item.getQuantityInStock() < orderItem.getQuantity()) {
-                        throw new SQLException("Insufficient stock for item " + orderItem.getItemCode());
+                    int currentStock = rs.getInt("quantity_in_stock");
+                    System.out.println("Current stock for " + orderItem.getItemCode() + ": " + currentStock);
+
+                    // Validate stock
+                    if (currentStock < orderItem.getQuantity()) {
+                        System.out.println("Insufficient stock for " + orderItem.getItemCode() + ". Available: " + currentStock);
+                        throw new SQLException("Insufficient stock for item " + orderItem.getItemCode() + ". Available: " + currentStock);
                     }
 
-                    stmt.setString(1, order.getCustomerAccountNumber());
-                    stmt.setString(2, order.getCustomerName());
-                    stmt.setString(3, orderItem.getItemCode());
-                    stmt.setString(4, orderItem.getItemName());
-                    stmt.setInt(5, orderItem.getQuantity());
-                    stmt.setDouble(6, orderItem.getUnitPrice());
-                    stmt.setDouble(7, orderItem.getTotalPrice());
-                    stmt.addBatch();
+                    // Insert order item
+                    try (PreparedStatement orderStmt = conn.prepareStatement(insertOrderSql)) {
+                        orderStmt.setString(1, order.getCustomerAccountNumber());
+                        orderStmt.setString(2, order.getCustomerName());
+                        orderStmt.setString(3, orderItem.getItemCode());
+                        orderStmt.setString(4, orderItem.getItemName());
+                        orderStmt.setInt(5, orderItem.getQuantity());
+                        orderStmt.setDouble(6, orderItem.getUnitPrice());
+                        orderStmt.setDouble(7, orderItem.getTotalPrice());
+                        int orderRows = orderStmt.executeUpdate();
+                        System.out.println("Order inserted for item " + orderItem.getItemCode() + ": " + orderRows + " row(s) affected");
+                    }
+
+                    // Update stock
+                    try (PreparedStatement stockStmt = conn.prepareStatement(updateStockSql)) {
+                        stockStmt.setInt(1, orderItem.getQuantity());
+                        stockStmt.setString(2, orderItem.getItemCode());
+                        stockStmt.setInt(3, orderItem.getQuantity());
+                        int stockRows = stockStmt.executeUpdate();
+                        System.out.println("Stock update for item " + orderItem.getItemCode() + ": " + stockRows + " row(s) affected");
+                        if (stockRows != 1) {
+                            System.out.println("Stock update failed for item: " + orderItem.getItemCode());
+                            throw new SQLException("Failed to update stock for item: " + orderItem.getItemCode());
+                        }
+                    }
                 }
-                stmt.executeBatch();
-                conn.commit(); // Commit transaction
-                return true;
-            } catch (SQLException e) {
-                conn.rollback(); // Rollback on error
-                throw e;
             }
+
+            conn.commit(); // Commit transaction
+            System.out.println("Transaction committed successfully.");
+            return true;
+        } catch (SQLException e) {
+            System.err.println("Error during transaction: " + e.getMessage());
+            conn.rollback(); // Rollback on error
+            throw e;
         } finally {
             conn.setAutoCommit(true); // Restore auto-commit
             if (conn != null) conn.close();

@@ -381,9 +381,9 @@
 
         <!-- Navigation -->
         <div class="text-center mb-4">
-            <a href="Admin Dashboard.html" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Back to Dashboard
-            </a>
+            <button class="btn btn-secondary" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
         </div>
     </div>
 
@@ -432,7 +432,8 @@
                         </div>`;
                 }
             } catch (error) {
-                alert('Error: ' + error.message);
+                alert('Error fetching customer: ' + error.message);
+                console.error('Customer fetch error:', error);
             }
         }
 
@@ -464,7 +465,8 @@
                     document.getElementById('subtotal').value = '';
                 }
             } catch (error) {
-                alert('Error: ' + error.message);
+                alert('Error fetching item: ' + error.message);
+                console.error('Item fetch error:', error);
             }
         }
 
@@ -553,13 +555,29 @@
             }
             
             try {
+                // Verify customer
                 const customerResponse = await fetch(`http://localhost:8080/Backend/resources/customers/${customerAccountNumber}`);
                 if (!customerResponse.ok) {
                     alert('Customer not found: ' + customerAccountNumber);
                     return;
                 }
                 
-                const data = {
+                // Verify stock availability for all items
+                for (const item of cart) {
+                    const itemResponse = await fetch(`http://localhost:8080/Backend/resources/items/${item.itemCode}`);
+                    if (!itemResponse.ok) {
+                        alert(`Item not found: ${item.itemCode}`);
+                        return;
+                    }
+                    const itemData = await itemResponse.json();
+                    if (itemData.quantityInStock < item.quantity) {
+                        alert(`Insufficient stock for ${item.itemName}! Available: ${itemData.quantityInStock}`);
+                        return;
+                    }
+                }
+
+                // Prepare order data
+                const orderData = {
                     customerAccountNumber: customerAccountNumber,
                     customerName: customerName,
                     orderItems: cart.map(item => ({
@@ -572,29 +590,66 @@
                     totalAmount: totalAmount
                 };
                 
-                const response = await fetch('http://localhost:8080/Backend/resources/orders', {
+                // Submit order
+                const orderResponse = await fetch('http://localhost:8080/Backend/resources/orders', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(orderData)
                 });
                 
-                if (response.ok) {
-                    const order = await response.json();
-                    displayReceipt(order);
-                    
-                    // Clear everything for next transaction
-                    cart = [];
-                    updateCartTable();
-                    document.getElementById('customerAccount').value = '';
-                    document.getElementById('customerDetails').innerHTML = '';
-                    customerName = '';
-                    
-                    alert('Transaction completed successfully!');
-                } else {
-                    alert('Error processing payment: ' + await response.text());
+                if (!orderResponse.ok) {
+                    const errorText = await orderResponse.text();
+                    alert('Error processing order: ' + errorText);
+                    console.error('Order submission error:', errorText);
+                    return;
                 }
+
+                const order = await orderResponse.json();
+
+                // Update stock quantities
+                for (const item of cart) {
+                    const itemResponse = await fetch(`http://localhost:8080/Backend/resources/items/${item.itemCode}`);
+                    if (!itemResponse.ok) {
+                        alert(`Error fetching item ${item.itemCode} for stock update`);
+                        console.error('Item fetch error for stock update:', await itemResponse.text());
+                        return;
+                    }
+                    const itemData = await itemResponse.json();
+                    const updatedItem = {
+                        itemCode: itemData.itemCode,
+                        itemName: itemData.itemName,
+                        unitPrice: itemData.unitPrice,
+                        quantityInStock: itemData.quantityInStock - item.quantity
+                    };
+                    
+                    const updateResponse = await fetch(`http://localhost:8080/Backend/resources/items/${item.itemCode}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(updatedItem)
+                    });
+                    
+                    if (!updateResponse.ok) {
+                        const errorText = await updateResponse.text();
+                        alert(`Error updating stock for ${item.itemName}: ${errorText}`);
+                        console.error('Stock update error for', item.itemName, ':', errorText);
+                        return;
+                    }
+                }
+
+                // Display receipt and clear form
+                displayReceipt(order);
+                
+                // Clear everything for next transaction
+                cart = [];
+                updateCartTable();
+                document.getElementById('customerAccount').value = '';
+                document.getElementById('customerDetails').innerHTML = '';
+                customerName = '';
+                
+                alert('Transaction completed successfully! Stock updated.');
             } catch (error) {
-                alert('Error: ' + error.message);
+                alert('Error processing transaction: ' + error.message);
+                console.error('Transaction error:', error);
             }
         }
 
@@ -603,7 +658,7 @@
                 <div class="bill-receipt">
                     <div class="receipt-header">
                         <h3 class="receipt-title">Pahana Edu Billing System</h3>
-                        <p class="text-muted">Receipt #${Date.now()}</p>
+                        <p class="text-muted">Receipt #${order.orderId || Date.now()}</p>
                         <p><strong>Customer:</strong> ${order.customerName} (${order.customerAccountNumber})</p>
                         <p><strong>Date:</strong> ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}</p>
                     </div>

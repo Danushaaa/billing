@@ -2,14 +2,7 @@ package com.mycompany.backend.resources;
 
 import DAO.ItemDAO;
 import Model.Item;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.sql.SQLException;
@@ -21,11 +14,15 @@ public class ItemResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response addItem(Item item) {
         try {
+            if (item.getItemCode() == null || item.getItemName() == null || item.getUnitPrice() < 0 || item.getQuantityInStock() < 0) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid item data: itemCode, itemName, unitPrice, and quantityInStock must be valid").build();
+            }
             boolean success = itemDAO.addItem(item);
             if (success) {
-                return Response.status(Response.Status.CREATED).entity("Item added successfully").build();
+                return Response.status(Response.Status.CREATED).entity(item).build();
             } else {
                 return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Failed to add item").build();
             }
@@ -43,7 +40,7 @@ public class ItemResource {
             if (item != null) {
                 return Response.ok(item).build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).entity("Item not found").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("Item not found: " + itemCode).build();
             }
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Database error: " + e.getMessage()).build();
@@ -64,14 +61,20 @@ public class ItemResource {
     @PUT
     @Path("{itemCode}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response updateItem(@PathParam("itemCode") String itemCode, Item item) {
         try {
-            item.setItemCode(itemCode); // Ensure item code matches
+            if (!itemCode.equals(item.getItemCode())) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Item code in path and body must match").build();
+            }
+            if (item.getItemName() == null || item.getUnitPrice() < 0 || item.getQuantityInStock() < 0) {
+                return Response.status(Response.Status.BAD_REQUEST).entity("Invalid item data: itemName, unitPrice, and quantityInStock must be valid").build();
+            }
             boolean success = itemDAO.updateItem(item);
             if (success) {
-                return Response.ok("Item updated successfully").build();
+                return Response.ok(item).build(); // Return updated item
             } else {
-                return Response.status(Response.Status.NOT_FOUND).entity("Item not found or update failed").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("Item not found or update failed: " + itemCode).build();
             }
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Database error: " + e.getMessage()).build();
@@ -80,13 +83,14 @@ public class ItemResource {
 
     @DELETE
     @Path("{itemCode}")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response deleteItem(@PathParam("itemCode") String itemCode) {
         try {
             boolean success = itemDAO.deleteItem(itemCode);
             if (success) {
                 return Response.ok("Item deleted successfully").build();
             } else {
-                return Response.status(Response.Status.NOT_FOUND).entity("Item not found or delete failed").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("Item not found or delete failed: " + itemCode).build();
             }
         } catch (SQLException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Database error: " + e.getMessage()).build();

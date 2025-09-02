@@ -619,7 +619,7 @@
                 </div>
 
                 <button type="submit" class="submit-btn" id="loginBtn">
-                    <span>AUTHENTICATE</span>
+                    <span>Login</span>
                 </button>
             </form>
 
@@ -637,7 +637,7 @@
     </div>
 
     <script>
-        // Enhanced form functionality
+        
         const form = document.getElementById('loginForm');
         const roleSelect = document.getElementById('roleSelect');
         const userIdInput = document.getElementById('userId');
@@ -646,12 +646,12 @@
         const togglePassword = document.getElementById('togglePassword');
         const alertContainer = document.getElementById('alertContainer');
 
-        // Update placeholder based on role selection
+        
         roleSelect.addEventListener('change', () => {
             userIdInput.placeholder = roleSelect.value === 'admin' ? 'Administrator Username' : 'Cashier ID';
         });
 
-        // Password visibility toggle
+        
         togglePassword.addEventListener('click', () => {
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
             passwordInput.setAttribute('type', type);
@@ -659,7 +659,7 @@
             togglePassword.classList.toggle('fa-eye-slash');
         });
 
-        // Enhanced alert system
+        
         function showAlert(message, type = 'error') {
             alertContainer.innerHTML = `
                 <div class="alert alert-${type}">
@@ -676,7 +676,7 @@
             }
         }
 
-        // Advanced form validation
+        
         function validateInput(input, minLength, fieldName) {
             const value = input.value.trim();
             if (!value) {
@@ -692,19 +692,19 @@
             return true;
         }
 
-        // Form submission with role-based authentication
+        
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Clear previous alerts
+            
             alertContainer.innerHTML = '';
 
-            // Validate inputs
+            
             if (!validateInput(roleSelect, null, 'Role')) return;
             if (!validateInput(userIdInput, 3, roleSelect.value === 'admin' ? 'Username' : 'Cashier ID')) return;
             if (!validateInput(passwordInput, 4, 'Password')) return;
 
-            // Show loading state
+            
             loginBtn.classList.add('loading');
             loginBtn.innerHTML = '';
 
@@ -746,7 +746,7 @@
                 console.error('Authentication error:', error);
                 showAlert('Network error. Please check your connection and try again.');
             } finally {
-                // Reset button state
+                
                 setTimeout(() => {
                     loginBtn.classList.remove('loading');
                     loginBtn.innerHTML = '<span>AUTHENTICATE</span>';
@@ -754,7 +754,7 @@
             }
         });
 
-        // Real-time input validation visual feedback
+        
         [roleSelect, userIdInput, passwordInput].forEach(input => {
             input.addEventListener('input', function() {
                 const wrapper = this.closest('.input-wrapper, .select-wrapper');
@@ -773,14 +773,14 @@
             });
         });
 
-        // Keyboard shortcuts
+        
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
                 form.dispatchEvent(new Event('submit'));
             }
         });
 
-        // Add subtle animations on load
+        
         window.addEventListener('load', () => {
             document.body.style.opacity = '1';
         });
